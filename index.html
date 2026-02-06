@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CENTRAL TECH | Gestão Documental e Imigração</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #7c3aed;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --gray-50: #f9fafb;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-400: #94a3b8;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --gray-900: #0f172a;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--gray-800);
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Header e Navegação */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0 24px;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            padding-left: 8px;
+        }
+
+        .logo-icon {
+            color: var(--secondary);
+            font-size: 2rem;
+        }
+
+        /* Menu Desktop */
+        .nav-desktop {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .nav-desktop {
+                display: none;
+            }
+        }
+
+        .nav-desktop a {
+            text-decoration: none;
+            color: var(--gray-800);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-desktop a:hover {
+            color: var(--primary);
+        }
+
+        .nav-desktop a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-desktop a:hover::after {
+            width: 100%;
+        }
+
+        /* Botões de autenticação desktop */
+        .auth-buttons-desktop {
+            display: flex;
+            gap: 16px;
+            padding-right: 8px;
+        }
+
+        @media (max-width: 992px) {
+            .auth-buttons-desktop {
+                display: none;
+            }
+        }
+
+        /* Botão menu mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-800);
+            cursor: pointer;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            margin-right: 4px;
+        }
+
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+        }
+
+        .mobile-menu-btn:hover {
+            background-color: var(--gray-100);
+        }
+
+        /* Menu Mobile */
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: var(--shadow-xl);
+            padding: 32px;
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 999;
+            border-top: 1px solid var(--gray-200);
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--gray-800);
+            font-weight: 500;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+
+        .mobile-menu a:hover {
+            color: var(--primary);
+            padding-left: 12px;
+        }
+
+        /* Botões no menu mobile */
+        .mobile-auth-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .mobile-auth-buttons .btn {
+            padding: 12px 16px !important;
+            font-size: 1rem !important;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-50);
+            transform: translateY(-2px);
+        }
+
+        .btn-google {
+            background-color: white;
+            color: var(--gray-800);
+            border: 2px solid var(--gray-300);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-google:hover {
+            background-color: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+        }
+
+        .btn-google i {
+            color: #DB4437;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%232563eb' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            transform: perspective(1000px) rotateY(-10deg);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image img:hover {
+            transform: perspective(1000px) rotateY(0deg);
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--gray-900);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        @media (max-width: 1100px) {
+            h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--gray-600);
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        @media (max-width: 768px) {
+            .subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* CTA buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 992px) {
+            .cta-buttons {
+                justify-content: center;
+            }
+        }
+
+        /* Seção de Aviso Importante */
+        .notice-section {
+            padding: 80px 0;
+            background-color: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .notice-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            border-left: 4px solid var(--primary);
+        }
+
+        .notice-language {
+            margin-bottom: 40px;
+        }
+
+        .notice-language:last-child {
+            margin-bottom: 0;
+        }
+
+        .notice-language h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+            font-family: 'Poppins', sans-serif;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .notice-language p {
+            color: var(--gray-600);
+            margin-bottom: 16px;
+            line-height: 1.7;
+        }
+
+        .notice-language ul {
+            list-style: none;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+
+        .notice-language li {
+            padding: 8px 0;
+            color: var(--gray-700);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .notice-language li::before {
+            content: '•';
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        .notice-language a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .notice-language a:hover {
+            text-decoration: underline;
+        }
+
+        .divider-line {
+            height: 1px;
+            background-color: var(--gray-300);
+            margin: 40px 0;
+        }
+
+        /* WebView Container */
+        .webview-container {
+            width: 100%;
+            height: 600px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            margin-top: 30px;
+            border: 1px solid var(--gray-200);
+            background-color: white;
+            display: none;
+        }
+
+        .webview-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .webview-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-webview {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .close-webview:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .webview-frame {
+            width: 100%;
+            height: calc(100% - 60px);
+            border: none;
+        }
+
+        /* Seção de Sistemas */
+        .systems-section {
+            padding: 100px 0;
+            background-color: white;
+        }
+
+        @media (max-width: 768px) {
+            .systems-section {
+                padding: 80px 0;
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        @media (max-width: 1100px) {
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray-600);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            font-size: 1.2rem;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .system-card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* BORDA FIXA PARA CADA CARD - CORES SUAVES */
+        .system-card.eoir-card {
+            border-color: var(--primary);
+            border-width: 2px;
+        }
+        
+        .system-card.uscis-card {
+            border-color: #1e90ff; /* Azul mais suave */
+            border-width: 2px;
+        }
+        
+        .system-card.i94-card {
+            border-color: #4682b4; /* Azul aço */
+            border-width: 2px;
+        }
+
+        .system-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .system-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+            color: var(--gray-900);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .system-card p {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            flex-grow: 1;
+        }
+
+        .system-card .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 28px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .system-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Seção de Preços - BORDAS COLORIDAS FIXAS */
+        .pricing-section {
+            padding: 80px 0;
+            background-color: var(--gray-50);
+        }
+
+        @media (max-width: 768px) {
+            .pricing-section {
+                padding: 60px 0;
+            }
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            padding: 30px 24px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            border: 3px solid transparent;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        /* Borda gradiente fixa para todos os cards */
+        .pricing-card {
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+        }
+
+        .pricing-card.featured {
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+            transform: scale(1.02);
+        }
+
+        .pricing-card.selected {
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--success), var(--accent)) 1;
+            animation: borderPulse 2s infinite;
+        }
+
+        .pricing-card.featured.selected {
+            transform: scale(1.02) translateY(-5px);
+        }
+
+        @media (max-width: 992px) {
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            .pricing-card.featured.selected {
+                transform: translateY(-5px);
+            }
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-bottom-left-radius: var(--radius);
+            z-index: 1;
+        }
+
+        .pricing-header {
+            margin-bottom: 24px;
+        }
+
+        .pricing-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .pricing-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .pricing-period {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features i {
+            color: var(--success);
+            font-size: 0.8rem;
+        }
+
+        .pricing-features .fa-times {
+            color: var(--gray-400) !important;
+        }
+
+        @keyframes borderPulse {
+            0% { border-image-source: linear-gradient(135deg, var(--success), var(--accent)); }
+            50% { border-image-source: linear-gradient(135deg, var(--accent), var(--success)); }
+            100% { border-image-source: linear-gradient(135deg, var(--success), var(--accent)); }
+        }
+
+        /* Seção de Serviços - ESTILO FAQ COM BORDAS FIXAS AZUIS */
+        .services-section {
+            padding: 80px 0;
+            background-color: white;
+        }
+
+        @media (max-width: 768px) {
+            .services-section {
+                padding: 60px 0;
+            }
+        }
+
+        .services-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .service-faq-item {
+            background-color: white;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            overflow: hidden;
+            border: 2px solid var(--primary); /* BORDA FIXA AZUL */
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .service-faq-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .service-faq-item.active {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-question {
+            padding: 24px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background-color: white;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            transition: var(--transition);
+        }
+
+        .service-question:hover {
+            background-color: var(--gray-50);
+        }
+
+        .service-question.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .service-question i {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .service-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .service-answer {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: white;
+        }
+
+        .service-answer.active {
+            padding: 32px;
+            max-height: none; /* REMOVIDO LIMITE DE ALTURA */
+            height: auto;
+            border-top: 1px solid var(--gray-200);
+            display: block; /* GARANTIR QUE O CONTEÚDO APAREÇA INTEGRALMENTE */
+        }
+
+        .service-answer h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .service-answer p {
+            color: var(--gray-600);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .service-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .service-features li:last-child {
+            border-bottom: none;
+        }
+
+        .service-features i {
+            color: var(--primary);
+            min-width: 20px;
+            margin-top: 2px;
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 380px;
+            padding: 25px;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            animation: slideUp 0.4s ease;
+            margin: auto;
+        }
+
+        @media (max-width: 480px) {
+            .modal-content {
+                padding: 20px 16px;
+                max-width: 100%;
+                margin: 10px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .modal {
+                align-items: flex-start;
+                padding-top: 40px;
+                padding-bottom: 40px;
+                overflow-y: auto;
+            }
+            .modal-content {
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-600);
+            background: none;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            z-index: 10;
+        }
+
+        .close-modal:hover {
+            background-color: var(--gray-100);
+        }
+
+        .modal h2 {
+            margin-bottom: 10px;
+            color: var(--gray-900);
+            font-size: 1.5rem;
+            text-align: center;
+            padding-right: 20px;
+        }
+
+        .modal-subtitle {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+            padding-right: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--gray-800);
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: var(--radius);
+            border: 2px solid var(--gray-300);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            background-color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 45%;
+            height: 1px;
+            background-color: var(--gray-300);
+        }
+
+        .divider::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 45%;
+            height: 1px;
+            background-color: var(--gray-300);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .modal-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        .modal-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 8px;
+            background: none;
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .modal-tab.active {
+            color: var(--primary);
+        }
+
+        .modal-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--gray-900);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
+        .footer-column h4 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .footer-column p {
+            color: var(--gray-400);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .footer-column a:hover {
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--gray-800);
+            color: var(--gray-500);
+            font-size: 0.85rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: white;
+            color: var(--gray-800);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 3000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            max-width: 350px;
+            border-left: 4px solid var(--success);
+        }
+
+        @media (max-width: 768px) {
+            .toast {
+                left: 20px;
+                right: 20px;
+                max-width: none;
+                bottom: 20px;
+            }
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-icon {
+            font-size: 1.3rem;
+            color: var(--success);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-left: auto;
+        }
+        
+        .whatsapp-link {
+            text-decoration: none;
+            color: inherit;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .whatsapp-link:hover {
+            color: inherit;
+        }
+        
+        /* Sistema webview loading */
+        .webview-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background-color: var(--gray-50);
+        }
+        
+        .webview-loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error message */
+        .error-message {
+            background-color: var(--danger);
+            color: white;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        /* Links externos */
+        .external-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .external-link:hover {
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-scale-balanced logo-icon"></i>
+                <span>CENTRAL TECH</span>
+            </a>
+            
+            <!-- Menu Desktop -->
+            <nav class="nav-desktop">
+                <ul class="nav-desktop">
+                    <li><a href="#home">Início</a></li>
+                    <li><a href="#notice">Aviso Importante</a></li>
+                    <li><a href="#services">Serviços</a></li>
+                    <li><a href="#pricing">Preços</a></li>
+                    <li><a href="#systems">Sistemas</a></li>
+                    <li><a href="#adc.html"></a></li>
+                </ul>
+            </nav>
+            
+            <!-- Botões de autenticação desktop -->
+            <div class="auth-buttons-desktop">
+                <button class="btn btn-secondary" id="loginBtn">Entrar</button>
+                <button class="btn btn-primary" id="signupBtn">Cadastrar</button>
+            </div>
+            
+            <!-- Botão menu mobile -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Menu Mobile -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#home">Início</a>
+            <a href="#notice">Aviso Importante</a>
+            <a href="#services">Serviços</a>
+            <a href="#pricing">Preços</a>
+            <a href="#systems">Sistemas</a>
+            <li><a href="#adc.html"></a></li>
+            
+            <!-- Botões de autenticação mobile -->
+            <div class="mobile-auth-buttons">
+                <button class="btn btn-secondary" id="mobileLoginBtn">Entrar</button>
+                <button class="btn btn-primary" id="mobileSignupBtn">Cadastrar</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Gestão <span>Documental</span> e Consultoria <span>Migratória</span></h1>
+                <p class="subtitle">CENTRAL TECH oferece suporte completo a empresas e pessoas, unindo expertise internacional, inovação tecnológica e segurança jurídica.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" id="heroSignupBtn">
+                        <i class="fas fa-rocket"></i> Comece Agora
+                    </button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Gestão Documental e Consultoria">
+            </div>
+        </div>
+    </section>
+
+    <!-- Nova Section: Aviso Importante -->
+    <section class="notice-section" id="notice">
+        <div class="container">
+            <h2 class="section-title">Aviso Importante – Conformidade com o Florida Bar</h2>
+            <p class="section-subtitle">Informações essenciais sobre nossos serviços e conformidade legal</p>
+            
+            <div class="notice-content">
+                <div class="notice-language">
+                    <h3>Important Notice – Florida Bar Compliance</h3>
+                    <p>Central do Imigrante is a private company that acts as a document preparer and facilitator for immigrants in the United States.</p>
+                    <p>We are not licensed attorneys and do not provide legal advice or legal representation.</p>
+                    <p>Our services include form preparation, translations, scheduling, document notarization, and other administrative assistance, based solely on the information provided by the client.</p>
+                    <p>In compliance with the Florida Bar regulations and Section 10 of Chapter 454 of the Florida Statutes, we clearly state that:</p>
+                    <ul>
+                        <li>We do not offer legal advice;</li>
+                        <li>We do not represent clients before USCIS, EOIR, or any immigration or judicial authority;</li>
+                        <li>Our role is limited to document assistance and administrative support, always performed with ethics, transparency, and full respect for the law.</li>
+                    </ul>
+                    <p>For legal advice on immigration matters, we recommend seeking the assistance of a licensed attorney in the United States.</p>
+                    <p>Visit us at: <a href="https://www.centraldoimigrante.com" target="_blank">www.centraldoimigrante.com</a></p>
+                </div>
+                
+                <div class="divider-line"></div>
+                
+                <div class="notice-language">
+                    <h3>Aviso Importante – Conformidade com o Florida Bar</h3>
+                    <p>A Central do Imigrante é uma empresa privada que atua como facilitadora de serviços administrativos e preparadora de documentos para imigrantes nos Estados Unidos.</p>
+                    <p>Não somos advogados licenciados nem estamos autorizados a prestar serviços legais ou assessoria jurídica.</p>
+                    <p>Nossos serviços incluem o preenchimento de formulários migratórios, traduções, agendamentos, autenticações e outras atividades administrativas, sempre baseados nas informações fornecidas diretamente pelo cliente.</p>
+                    <p>Conforme as normas do Florida Bar e da Seção 10 do Capítulo 454 do Florida Statutes, deixamos claro que:</p>
+                    <ul>
+                        <li>Não oferecemos aconselhamento jurídico;</li>
+                        <li>Não representamos clientes perante o USCIS, EOIR ou qualquer outra autoridade migratória ou judicial;</li>
+                        <li>Nossa atuação é limitada à assistência documental e organizacional, com transparência, ética e respeito à legislação vigente.</li>
+                    </ul>
+                    <p>Para aconselhamento legal sobre imigração, recomendamos buscar um advogado licenciado nos Estados Unidos.</p>
+                    <p>Para mais informações, visite nosso site: <a href="https://www.centraldoimigrante.com" target="_blank">www.centraldoimigrante.com</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Serviços - ESTILO FAQ -->
+    <section class="services-section" id="services">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <p class="section-subtitle">Oferecemos soluções completas em gestão documental e consultoria migratória</p>
+            
+            <div class="services-container">
+                <!-- Item 1 -->
+                <div class="service-faq-item active">
+                    <button class="service-question active">
+                        <span>Consultoria Migratória</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer active">
+                        <h3>Consultoria Migratória</h3>
+                        <p>Oferecemos consultoria especializada em processos migratórios para diversos países, com foco em EUA, Canadá, Europa e Austrália. Nossa equipe acompanha todo o processo desde a análise de elegibilidade até a obtenção do visto ou residência permanente.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Análise de elegibilidade para diferentes tipos de vistos</li>
+                            <li><i class="fas fa-check-circle"></i> Preparação completa de documentação</li>
+                            <li><i class="fas fa-check-circle"></i> Acompanhamento de processos junto a embaixadas e consulados</li>
+                            <li><i class="fas fa-check-circle"></i> Consultoria para reunificação familiar</li>
+                            <li><i class="fas fa-check-circle"></i> Suporte em processos de refúgio e asilo</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Vistos e Passaportes</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Vistos e Passaportes</h3>
+                        <p>Gestão completa de processos para obtenção e renovação de passaportes e vistos de todos os tipos, incluindo vistos de trabalho, estudo, turismo e investimento.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Vistos de trabalho (H1-B, L1, TN, E-3)</li>
+                            <li><i class="fas fa-check-circle"></i> Vistos de estudante (F-1, J-1, M-1)</li>
+                            <li><i class="fas fa-check-circle"></i> Vistos de investidor (E-2, EB-5)</li>
+                            <li><i class="fas fa-check-circle"></i> Renovação e extensão de vistos</li>
+                            <li><i class="fas fa-check-circle"></i> Emissão e renovação de passaportes</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Gestão Documental</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Gestão Documental</h3>
+                        <p>Sistema completo de organização, digitalização e gestão de documentos importantes, com alertas automáticos para vencimentos e renovações necessárias.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Digitalização e organização de documentos</li>
+                            <li><i class="fas fa-check-circle"></i> Sistema de alertas para vencimentos</li>
+                            <li><i class="fas fa-check-circle"></i> Armazenamento seguro em nuvem</li>
+                            <li><i class="fas fa-check-circle"></i> Backup automático e criptografia</li>
+                            <li><i class="fas fa-check-circle"></i> Acesso multiplataforma</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Assessoria Jurídica</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Assessoria Jurídica</h3>
+                        <p>Suporte jurídico especializado em direito migratório internacional, com consultoria para compliance legal e representação em processos administrativos.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Consultoria em direito migratório</li>
+                            <li><i class="fas fa-check-circle"></i> Representação em processos administrativos</li>
+                            <li><i class="fas fa-check-circle"></i> Análise de contratos internacionais</li>
+                            <li><i class="fas fa-check-circle"></i> Compliance legal para empresas</li>
+                            <li><i class="fas fa-check-circle"></i> Assessoria para dupla cidadania</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 5 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Serviços Empresariais</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Serviços Empresariais</h3>
+                        <p>Soluções completas para empresas com funcionários internacionais, incluindo gestão de vistos corporativos, compliance trabalhista e consultoria para expansão global.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Vistos corporativos para equipes</li>
+                            <li><i class="fas fa-check-circle"></i> Compliance trabalhista internacional</li>
+                            <li><i class="fas fa-check-circle"></i> Consultoria para expansão global</li>
+                            <li><i class="fas fa-check-circle"></i> Gestão de relocation de executivos</li>
+                            <li><i class="fas fa-check-circle"></i> Suporte para empresas estrangeiras</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 6 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Transformação Digital</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Transformação Digital</h3>
+                        <p>Implementação de soluções tecnológicas para otimizar processos migratórios e de gestão documental, com sistemas personalizados para suas necessidades.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Desenvolvimento de sistemas personalizados</li>
+                            <li><i class="fas fa-check-circle"></i> Integração com sistemas governamentais</li>
+                            <li><i class="fas fa-check-circle"></i> Automação de processos repetitivos</li>
+                            <li><i class="fas fa-check-circle"></i> Dashboard de acompanhamento</li>
+                            <li><i class="fas fa-check-circle"></i> Relatórios e analytics</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Item 7 -->
+                <div class="service-faq-item">
+                    <button class="service-question">
+                        <span>Suporte Contínuo</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="service-answer">
+                        <h3>Suporte Contínuo</h3>
+                        <p>Assistência contínua para clientes, com suporte especializado, atualizações sobre mudanças legislativas e acompanhamento permanente de processos.</p>
+                        <ul class="service-features">
+                            <li><i class="fas fa-check-circle"></i> Suporte especializado 24/7</li>
+                            <li><i class="fas fa-check-circle"></i> Atualizações legislativas</li>
+                            <li><i class="fas fa-check-circle"></i> Acompanhamento permanente</li>
+                            <li><i class="fas fa-check-circle"></i> Consultas ilimitadas</li>
+                            <li><i class="fas fa-check-circle"></i> Treinamento e capacitação</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Preços -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Planos e Preços</h2>
+            <p class="section-subtitle">Escolha o plano ideal para suas necessidades de gestão documental e consultoria migratória</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card" data-plan="free">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Free</h3>
+                        <div class="pricing-price">$ 0</div>
+                        <div class="pricing-period">/mês</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Gestão de até 1 documentos</li>
+                        <li><i class="fas fa-check"></i> Alertas de vencimento básicos</li>
+                        <li><i class="fas fa-check"></i> Acesso a consultas de processos</li>
+                        <li><i class="fas fa-times"></i> Suporte por email (48h)</li>
+                        <li><i class="fas fa-times"></i> Consultoria migratória</li>
+                    </ul>
+                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de saber mais sobre o plano Free da CENTRAL TECH" target="_blank" class="whatsapp-link">
+                        <button class="btn btn-secondary" style="width: 100%;">Começar Gratuitamente</button>
+                    </a>
+                </div>
+                
+                <div class="pricing-card featured selected" data-plan="pro">
+                    <div class="pricing-badge">MAIS POPULAR</div>
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Pró</h3>
+                        <div class="pricing-price">$ 15</div>
+                        <div class="pricing-period">/mês</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Gestão de até 50 documentos</li>
+                        <li><i class="fas fa-check"></i> Alertas de vencimento avançados</li>
+                        <li><i class="fas fa-check"></i> Consultoria migratória básica</li>
+                        <li><i class="fas fa-check"></i> Suporte prioritário (24h)</li>
+                        <li><i class="fas fa-check"></i> Relatórios mensais</li>
+                    </ul>
+                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de assinar o plano Pró da CENTRAL TECH" target="_blank" class="whatsapp-link">
+                        <button class="btn btn-primary" style="width: 100%;">Assinar Agora</button>
+                    </a>
+                </div>
+                
+                <div class="pricing-card" data-plan="empresa">
+                    <div class="pricing-header">
+                        <h3 class="pricing-name">Empresas</h3>
+                        <div class="pricing-price">$ 299</div>
+                        <div class="pricing-period">/mês</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Gestão de documentos ilimitada</li>
+                        <li><i class="fas fa-check"></i> Consultoria migratória completa</li>
+                        <li><i class="fas fa-check"></i> Suporte dedicado 24/7</li>
+                        <li><i class="fas fa-check"></i> Gestão de vistos corporativos</li>
+                        <li><i class="fas fa-check"></i> Dashboard empresarial</li>
+                    </ul>
+                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de saber mais sobre o plano Empresas da CENTRAL TECH" target="_blank" class="whatsapp-link">
+                        <button class="btn btn-secondary" style="width: 100%;">Fale Conosco</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Sistemas -->
+    <section class="systems-section" id="systems">
+        <div class="container">
+            <h2 class="section-title">Sistemas Oficiais de Consulta</h2>
+            <p class="section-subtitle">Acesse diretamente os sistemas governamentais para consultar seus processos migratórios</p>
+            
+            <div class="systems-grid">
+                <div class="system-card eoir-card">
+                    <h3>EOIR – Processos de Imigração</h3>
+                    <p>Consulta de casos na Corte de Imigração (EOIR). Acompanhe o status do seu processo diretamente no sistema do Departamento de Justiça dos EUA.</p>
+                    <button class="btn" id="eoirBtn">
+                        <i class="fas fa-external-link-alt"></i> Acessar EOIR
+                    </button>
+                </div>
+
+                <div class="system-card uscis-card">
+                    <h3>USCIS – Status de Processos</h3>
+                    <p>Verifique o status de petições e formulários USCIS. Consulte processos de residência, cidadania e autorizações de trabalho.</p>
+                    <a href="https://egov.uscis.gov/" target="_blank" class="external-link">
+                        <button class="btn">
+                            <i class="fas fa-external-link-alt"></i> Acessar USCIS
+                        </button>
+                    </a>
+                </div>
+
+                <div class="system-card i94-card">
+                    <h3>I-94 – Registro de Entrada</h3>
+                    <p>Consulta do histórico recente do formulário I-94. Verifique seu registro de entrada e saída dos Estados Unidos.</p>
+                    <a href="https://i94.cbp.dhs.gov/I94/#/home" target="_blank" class="external-link">
+                        <button class="btn">
+                            <i class="fas fa-external-link-alt"></i> Acessar I-94
+                        </button>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- WebView Container (inicialmente escondido) -->
+            <div class="webview-container" id="webviewContainer">
+                <div class="webview-header">
+                    <h3 id="webviewTitle"><i class="fas fa-globe"></i> Sistema de Consulta</h3>
+                    <button class="close-webview" id="closeWebview">&times;</button>
+                </div>
+                <div id="webviewLoading" class="webview-loading" style="display: none;">
+                    <div class="webview-loading-spinner"></div>
+                    <p>Carregando sistema...</p>
+                </div>
+                <div id="webviewError" class="error-message" style="display: none;">
+                    Não foi possível carregar o sistema. Verifique sua conexão ou tente novamente.
+                </div>
+                <iframe class="webview-frame" id="webviewFrame" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Login/Cadastro -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAuthModal">&times;</button>
+            
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="login">Entrar</button>
+                <button class="modal-tab" data-tab="signup">Cadastrar</button>
+            </div>
+            
+            <!-- Tab de Login -->
+            <div class="tab-content active" id="loginTab">
+                <h2>Acesse sua conta</h2>
+                <p class="modal-subtitle">Entre para gerenciar seus documentos e processos</p>
+                
+                <button class="btn btn-google" id="googleLoginBtn">
+                    <i class="fab fa-google"></i> Continuar com Google
+                </button>
+                
+                <div class="divider">ou</div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginPassword">Senha</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <div>
+                            <input type="checkbox" id="rememberMe">
+                            <label for="rememberMe">Lembrar-me</label>
+                        </div>
+                        <a href="#" id="forgotPassword">Esqueci minha senha</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+                        <i class="fas fa-sign-in-alt"></i> Entrar
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Tab de Cadastro -->
+            <div class="tab-content" id="signupTab">
+                <h2>Crie sua conta</h2>
+                <p class="modal-subtitle">Cadastre-se para começar a gerenciar seus documentos e processos</p>
+                
+                <button class="btn btn-google" id="googleSignupBtn">
+                    <i class="fab fa-google"></i> Cadastrar com Google
+                </button>
+                
+                <div class="divider">ou</div>
+                
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupName">Nome Completo</label>
+                        <input type="text" id="signupName" class="form-control" placeholder="Seu nome completo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupEmail">E-mail</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPhone">Telefone</label>
+                        <input type="tel" id="signupPhone" class="form-control" placeholder="Seu número de telefone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Senha</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Crie uma senha segura" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">Confirmar Senha</label>
+                        <input type="password" id="signupConfirmPassword" class="form-control" placeholder="Confirme sua senha" required>
+                    </div>
+                    
+                    <div class="form-footer">
+                        <div>
+                            <input type="checkbox" id="acceptTerms" required>
+                            <label for="acceptTerms">Aceito os <a href="#" style="color: var(--primary);">termos de serviço</a></label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 8px;">
+                        <i class="fas fa-user-plus"></i> Criar Conta
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h4>CENTRAL TECH</h4>
+                    <p>Integramos consultoria estratégica, legal e tecnológica, assegurando soluções seguras, escaláveis e alinhadas ao crescimento global.</p>
+                    <div class="social-links">
+                        <a href="mailto:contato.centraldoimigrante@gmail.com"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.instagram.com/edvaldogomsan?igsh=MW5tbmRxbWRuNG81OQ=="><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/17862553181"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home"><i class="fas fa-chevron-right"></i> Início</a></li>
+                        <li><a href="#notice"><i class="fas fa-chevron-right"></i> Aviso Importante</a></li>
+                        <li><a href="#services"><i class="fas fa-chevron-right"></i> Serviços</a></li>
+                        <li><a href="#pricing"><i class="fas fa-chevron-right"></i> Preços</a></li>
+                        <li><a href="#systems"><i class="fas fa-chevron-right"></i> Sistemas</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <ul>
+                        <li><a href="mailto:contato.centraldoimigrante@gmail.com"><i class="fas fa-envelope"></i> Enviar e-mail</a></li>
+                        <li><a href="https://wa.me/17862553181"><i class="fab fa-whatsapp"></i> Fale Conosco</a></li>
+                        <li><a href="https://maps.google.com/?q=miame,FL,EUA" target="_blank"><i class="fas fa-map-marker-alt"></i> Miame, FL - EUA</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 CENTRAL TECH CONSULTORIA & JURÍDICO. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle toast-icon"></i>
+        <div class="toast-content">
+            <div class="toast-title" id="toastTitle">Sucesso</div>
+            <div class="toast-message" id="toastMessage">Operação realizada com sucesso!</div>
+        </div>
+        <button class="toast-close" id="toastClose">&times;</button>
+    </div>
+
+    <script>
+        // Elementos do DOM
+const authModal = document.getElementById('authModal');
+const loginBtn = document.getElementById('loginBtn');
+const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+const signupBtn = document.getElementById('signupBtn');
+const mobileSignupBtn = document.getElementById('mobileSignupBtn');
+const heroSignupBtn = document.getElementById('heroSignupBtn');
+const closeAuthModal = document.getElementById('closeAuthModal');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const toast = document.getElementById('toast');
+const toastTitle = document.getElementById('toastTitle');
+const toastMessage = document.getElementById('toastMessage');
+const toastClose = document.getElementById('toastClose');
+const webviewContainer = document.getElementById('webviewContainer');
+const webviewFrame = document.getElementById('webviewFrame');
+const webviewTitle = document.getElementById('webviewTitle');
+const closeWebview = document.getElementById('closeWebview');
+const webviewLoading = document.getElementById('webviewLoading');
+const webviewError = document.getElementById('webviewError');
+const eoirBtn = document.getElementById('eoirBtn');
+
+// URLs dos sistemas
+const systemUrls = {
+    eoir: {
+        url: 'https://acis.eoir.justice.gov/en/',
+        name: 'EOIR - Processos de Imigração'
+    }
+};
+
+// WhatsApp número
+const whatsappNumber = '+5511989321702';
+
+// Função para redirecionar para adc.html
+function redirectToADC() {
+    // Simular um breve delay para mostrar feedback visual
+    setTimeout(() => {
+        window.location.href = 'adc.html';
+    }, 500);
+}
+
+// Funções auxiliares
+function showToast(title, message, type = "success") {
+    toastTitle.textContent = title;
+    toastMessage.textContent = message;
+    
+    // Definir cor baseada no tipo
+    const colors = {
+        success: "#10b981",
+        error: "#ef4444",
+        warning: "#f59e0b",
+        info: "#06b6d4"
+    };
+    
+    toast.style.borderLeftColor = colors[type] || colors.success;
+    toast.querySelector('.toast-icon').style.color = colors[type] || colors.success;
+    
+    toast.classList.add('show');
+    
+    // Auto-fechar após 5 segundos
+    setTimeout(() => {
+        hideToast();
+    }, 5000);
+}
+
+function hideToast() {
+    toast.classList.remove('show');
+}
+
+// Abrir sistema EOIR em webview
+function openSystemInWebview(system) {
+    const systemInfo = systemUrls[system];
+    if (!systemInfo) return;
+    
+    // Mostrar loading
+    webviewLoading.style.display = 'flex';
+    webviewError.style.display = 'none';
+    webviewFrame.style.display = 'none';
+    
+    webviewFrame.src = '';
+    webviewTitle.innerHTML = `<i class="fas fa-globe"></i> ${systemInfo.name}`;
+    webviewContainer.style.display = 'block';
+    
+    // Scroll para o webview
+    webviewContainer.scrollIntoView({ behavior: 'smooth' });
+    
+    // Configurar evento de load
+    webviewFrame.onload = function() {
+        webviewLoading.style.display = 'none';
+        webviewFrame.style.display = 'block';
+        webviewError.style.display = 'none';
+        showToast('Sistema carregado', `${systemInfo.name} está pronto para uso.`, 'success');
+    };
+    
+    webviewFrame.onerror = function() {
+        webviewLoading.style.display = 'none';
+        webviewError.style.display = 'block';
+        showToast('Erro de conexão', 'Não foi possível carregar o sistema. Verifique sua conexão.', 'error');
+    };
+    
+    // Iniciar carregamento
+    webviewFrame.src = systemInfo.url;
+}
+
+// Fechar webview
+function closeWebviewContainer() {
+    webviewContainer.style.display = 'none';
+    webviewFrame.src = '';
+    webviewLoading.style.display = 'none';
+    webviewError.style.display = 'none';
+    webviewFrame.style.display = 'block';
+}
+
+// Alternar entre tabs do modal
+function switchAuthTab(tabName) {
+    // Ativar tab clicada
+    document.querySelectorAll('.modal-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.tab === tabName);
+    });
+    
+    // Mostrar conteúdo correspondente
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.toggle('active', content.id === `${tabName}Tab`);
+    });
+}
+
+// Alternar entre serviços (estilo FAQ) - CORRIGIDO PARA RESPOSTAS INTEGRAIS
+function toggleService(index) {
+    const serviceItems = document.querySelectorAll('.service-faq-item');
+    const questionButtons = document.querySelectorAll('.service-question');
+    const answerDivs = document.querySelectorAll('.service-answer');
+    
+    // Fechar todos os outros itens
+    serviceItems.forEach((item, i) => {
+        if (i !== index) {
+            item.classList.remove('active');
+            questionButtons[i].classList.remove('active');
+            answerDivs[i].classList.remove('active');
+            answerDivs[i].style.maxHeight = '0';
+            answerDivs[i].style.padding = '0';
+        }
+    });
+    
+    // Alternar o item clicado
+    const isActive = serviceItems[index].classList.contains('active');
+    
+    if (!isActive) {
+        serviceItems[index].classList.add('active');
+        questionButtons[index].classList.add('active');
+        answerDivs[index].classList.add('active');
+        answerDivs[index].style.maxHeight = 'none'; // Permite altura total
+        answerDivs[index].style.padding = '32px';
+        
+        // Scroll suave para o item aberto
+        setTimeout(() => {
+            serviceItems[index].scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'nearest' 
+            });
+        }, 100);
+    } else {
+        serviceItems[index].classList.remove('active');
+        questionButtons[index].classList.remove('active');
+        answerDivs[index].classList.remove('active');
+        answerDivs[index].style.maxHeight = '0';
+        answerDivs[index].style.padding = '0';
+    }
+}
+
+// Selecionar plano de preços
+function selectPricingCard(plan) {
+    // Remover seleção de todos os cards
+    document.querySelectorAll('.pricing-card').forEach(card => {
+        card.classList.remove('selected');
+    });
+    
+    // Adicionar seleção ao card clicado
+    const selectedCard = document.querySelector(`.pricing-card[data-plan="${plan}"]`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected');
+    }
+}
+
+// Redirecionar para WhatsApp
+function redirectToWhatsApp(message = 'Olá! Gostaria de saber mais sobre os serviços da CENTRAL TECH') {
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+}
+
+// Simular login com Google
+function simulateGoogleLogin(isSignup = false) {
+    // Gerar um nome de usuário aleatório
+    const firstNames = ["João", "Maria", "Carlos", "Ana", "Pedro", "Juliana", "Marcos", "Fernanda"];
+    const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Almeida", "Pereira", "Costa"];
+    
+    const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@gmail.com`;
+    
+    const action = isSignup ? 'cadastro' : 'login';
+    
+    return {
+        name: `${randomFirstName} ${randomLastName}`,
+        email: randomEmail,
+        action: action
+    };
+}
+
+// Event Listeners
+// Botões de login
+loginBtn.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+    switchAuthTab('login');
+});
+
+mobileLoginBtn.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+    switchAuthTab('login');
+    mobileMenu.classList.remove('active');
+});
+
+// Botões de cadastro
+signupBtn.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+    switchAuthTab('signup');
+});
+
+mobileSignupBtn.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+    switchAuthTab('signup');
+    mobileMenu.classList.remove('active');
+});
+
+heroSignupBtn.addEventListener('click', () => {
+    authModal.style.display = 'flex';
+    switchAuthTab('signup');
+});
+
+// Fechar modal
+closeAuthModal.addEventListener('click', () => {
+    authModal.style.display = 'none';
+});
+
+// Fechar modal ao clicar fora
+window.addEventListener('click', (e) => {
+    if (e.target === authModal) {
+        authModal.style.display = 'none';
+    }
+});
+
+// Tabs do modal
+document.querySelectorAll('.modal-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        switchAuthTab(tab.dataset.tab);
+    });
+});
+
+// Login form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    // Simulação de login bem-sucedido
+    if (email && password) {
+        // Mostrar mensagem de sucesso
+        showToast('Login realizado', 'Redirecionando para área do cliente...', 'success');
+        
+        // Redirecionar para adc.html após 1 segundo
+        setTimeout(() => {
+            authModal.style.display = 'none';
+            window.location.href = 'adc.html';
+        }, 1000);
+    } else {
+        showToast('Erro no login', 'Por favor, preencha todos os campos.', 'error');
+    }
+});
+
+// Cadastro form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+document.getElementById('signupForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const confirmPassword = document.getElementById('signupConfirmPassword').value;
+    
+    // Validação básica
+    if (!name || !email || !password) {
+        showToast('Erro no cadastro', 'Por favor, preencha todos os campos obrigatórios.', 'error');
+        return;
+    }
+    
+    if (password !== confirmPassword) {
+        showToast('Erro no cadastro', 'As senhas não coincidem.', 'error');
+        return;
+    }
+    
+    if (!document.getElementById('acceptTerms').checked) {
+        showToast('Erro no cadastro', 'Você deve aceitar os termos de serviço.', 'error');
+        return;
+    }
+    
+    // Simulação de cadastro bem-sucedido
+    showToast('Cadastro realizado', `Bem-vindo(a), ${name}! Redirecionando para área do cliente...`, 'success');
+    
+    // Redirecionar para adc.html após 1 segundo
+    setTimeout(() => {
+        authModal.style.display = 'none';
+        window.location.href = 'adc.html';
+    }, 1000);
+});
+
+// Login com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+document.getElementById('googleLoginBtn').addEventListener('click', () => {
+    // Simular tempo de autenticação
+    const btn = document.getElementById('googleLoginBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        const googleUser = simulateGoogleLogin(false);
+        
+        // Mostrar mensagem de sucesso
+        showToast('Login com Google realizado', `Bem-vindo, ${googleUser.name}! Redirecionando...`, 'success');
+        
+        // Redirecionar para adc.html após 1 segundo
+        setTimeout(() => {
+            authModal.style.display = 'none';
+            window.location.href = 'adc.html';
+        }, 1000);
+        
+        // Resetar botão do Google
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }, 1500);
+});
+
+// Cadastro com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+document.getElementById('googleSignupBtn').addEventListener('click', () => {
+    // Simular tempo de autenticação
+    const btn = document.getElementById('googleSignupBtn');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+        const googleUser = simulateGoogleLogin(true);
+        
+        // Mostrar mensagem de sucesso
+        showToast('Cadastro com Google realizado', `Conta criada para ${googleUser.name}! Redirecionando...`, 'success');
+        
+        // Redirecionar para adc.html após 1 segundo
+        setTimeout(() => {
+            authModal.style.display = 'none';
+            window.location.href = 'adc.html';
+        }, 1000);
+        
+        // Resetar botão do Google
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }, 1500);
+});
+
+// Menu mobile
+mobileMenuBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+});
+
+// Fechar menu mobile ao clicar fora
+document.addEventListener('click', (e) => {
+    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mobileMenu.classList.remove('active');
+    }
+});
+
+// Botão EOIR (abre no webview)
+eoirBtn.addEventListener('click', () => {
+    openSystemInWebview('eoir');
+});
+
+// Fechar webview
+closeWebview.addEventListener('click', closeWebviewContainer);
+
+// Botões de serviços (FAQ)
+document.querySelectorAll('.service-question').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+        toggleService(index);
+    });
+});
+
+// Seleção de cards de preços
+document.querySelectorAll('.pricing-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const plan = card.getAttribute('data-plan');
+        selectPricingCard(plan);
+    });
+});
+
+// Esqueci minha senha
+document.getElementById('forgotPassword').addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast('Recuperação de senha', 'Um e-mail de recuperação será enviado para você.', 'info');
+});
+
+// Toast close button
+toastClose.addEventListener('click', () => {
+    hideToast();
+});
+
+// Smooth scroll para âncoras
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        if (this.getAttribute('href') === '#') return;
+        
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+            
+            // Fechar menu mobile se aberto
+            mobileMenu.classList.remove('active');
+        }
+    });
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+    // Selecionar plano Pró por padrão
+    selectPricingCard('pro');
+    
+    // Ajustar altura das respostas dos serviços ativos
+    document.querySelectorAll('.service-answer.active').forEach(answer => {
+        answer.style.maxHeight = 'none';
+        answer.style.display = 'block';
+    });
+    
+    // Mostrar mensagem de boas-vindas
+    setTimeout(() => {
+        showToast('Bem-vindo à CENTRAL TECH', 'Explore nossos serviços e sistemas oficiais', 'info');
+    }, 1000);
+    
+    // Configurar webview para abrir links dentro dele mesmo
+    webviewFrame.addEventListener('load', function() {
+        try {
+            // Tentar interceptar links dentro do iframe
+            const iframeDoc = webviewFrame.contentDocument || webviewFrame.contentWindow.document;
+            const links = iframeDoc.querySelectorAll('a');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.href;
+                    if (url && !url.includes('javascript:')) {
+                        webviewFrame.src = url;
+                    }
+                });
+            });
+        } catch (e) {
+            // Erro de cross-origin, ignorar
+        }
+    });
+});
+    </script>
+</body>
+</html>
+
+
