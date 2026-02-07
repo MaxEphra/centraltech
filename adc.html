@@ -24,6 +24,12 @@
             --warning-light: #fef3c7;
             --success-color: #10b981;
             --success-light: #d1fae5;
+            --purple-color: #8b5cf6;
+            --purple-light: #ede9fe;
+            --cyan-color: #06b6d4;
+            --cyan-light: #cffafe;
+            --pink-color: #ec4899;
+            --pink-light: #fce7f3;
             --gray-50: #f9fafb;
             --gray-100: #f3f4f6;
             --gray-200: #e5e7eb;
@@ -76,8 +82,8 @@
         }
 
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background-color: var(--primary-color);
             color: white;
@@ -85,6 +91,14 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid var(--primary-light);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
         }
 
         /* Main Content */
@@ -109,6 +123,8 @@
             position: relative;
             color: var(--primary-color);
             transition: color 0.3s;
+            background: none;
+            border: none;
         }
 
         .notification-bell.has-notifications {
@@ -187,7 +203,7 @@
             text-decoration: underline;
         }
 
-        /* Summary Cards - Updated with clean borders */
+        /* Summary Cards - Updated with clean borders and icons */
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -203,11 +219,41 @@
             text-align: center;
             border: 2px solid var(--primary-light);
             transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .summary-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-md);
+        }
+
+        .summary-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .summary-icon.cases {
+            background-color: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+        }
+
+        .summary-icon.documents {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .summary-icon.payments {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
         }
 
         .summary-number {
@@ -307,6 +353,802 @@
             font-weight: 500;
         }
 
+        /* Documents Page - Updated with visible borders and icons */
+        .documents-summary {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .documents-warning {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--warning-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 2px solid var(--gray-300);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .category-icon {
+            font-size: 24px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .category-icon.ead {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .category-icon.passport {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .category-icon.license {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .category-icon.receipt {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .category-icon.i94 {
+            background-color: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .category-icon.other {
+            background-color: #f3e8ff;
+            color: #5b21b6;
+        }
+
+        .category-info {
+            flex-grow: 1;
+        }
+
+        .category-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .category-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .status-warning {
+            background-color: var(--warning-light);
+            color: #92400e;
+        }
+
+        .status-normal {
+            background-color: var(--success-light);
+            color: #065f46;
+        }
+
+        .status-expired {
+            background-color: var(--danger-light);
+            color: #991b1b;
+        }
+
+        .category-count {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .document-number {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        /* Payments Page - Updated with colored borders */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .service-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--primary-light);
+            transition: transform 0.2s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .service-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .service-description {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .service-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .history-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            color: var(--gray-600);
+            border: 1px solid var(--gray-200);
+        }
+
+        /* Notifications Page - Updated with selection system */
+        .notifications-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 0;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            overflow: hidden;
+        }
+
+        .notification-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .notification-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .no-notifications {
+            text-align: center;
+            color: var(--gray-600);
+            padding: 40px;
+        }
+
+        .notification-item {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            transition: background-color 0.2s;
+        }
+
+        .notification-item:hover {
+            background-color: var(--gray-50);
+        }
+
+        .notification-item.unread {
+            background-color: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .notification-item.read {
+            opacity: 0.8;
+        }
+
+        .notification-checkbox {
+            margin-top: 3px;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-message {
+            color: var(--gray-600);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .notification-date {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .notification-type-icon {
+            font-size: 14px;
+        }
+
+        .notification-type-icon.warning {
+            color: var(--warning-color);
+        }
+
+        .notification-type-icon.info {
+            color: var(--primary-color);
+        }
+
+        .notification-type-icon.success {
+            color: var(--success-color);
+        }
+
+        /* Profile Page - Updated with better styling */
+        .profile-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid var(--primary-light);
+            box-shadow: var(--shadow);
+        }
+
+        .profile-section.settings-emphasis {
+            border-color: var(--primary-color);
+            border-left-width: 4px;
+        }
+
+        .profile-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-section-title.settings-emphasis {
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .profile-avatar-large {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 600;
+            border: 4px solid var(--primary-light);
+        }
+
+        .profile-info h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--gray-800);
+        }
+
+        .profile-info p {
+            color: var(--gray-600);
+            font-size: 14px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 6px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .setting-item:hover {
+            background-color: var(--gray-50);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h4 {
+            font-weight: 500;
+            margin-bottom: 2px;
+            color: var(--gray-700);
+        }
+
+        .setting-info p {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .language-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-300);
+            background-color: white;
+            color: var(--gray-800);
+            font-weight: 500;
+            width: 150px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23374151' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .logout-btn {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .logout-btn:hover {
+            background-color: #dc2626;
+        }
+
+        /* Systems Section */
+        .systems-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+            border: 2px solid var(--primary-light);
+        }
+
+        .section-subtitle {
+            color: var(--gray-600);
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 800px;
+        }
+
+        .systems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .system-card {
+            background-color: var(--gray-50);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            border: 2px solid var(--gray-200);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .system-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .system-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .system-card p {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .external-link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .webview-container {
+            display: none;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-top: 30px;
+            border: 2px solid var(--gray-200);
+        }
+
+        .webview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .webview-header h3 {
+            margin: 0;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-webview {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-600);
+            line-height: 1;
+        }
+
+        .webview-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .webview-loading-spinner {
+            border: 4px solid var(--gray-200);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .webview-frame {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        /* Buttons */
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-300);
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.2);
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #0da271;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray-600);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--gray-800);
+        }
+
+        /* Bottom Navigation for Mobile */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            padding: 10px 0;
+            z-index: 100;
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--gray-600);
+            font-size: 10px;
+            transition: color 0.2s;
+            padding: 5px;
+            border-radius: 8px;
+            flex: 1;
+            max-width: 25%;
+        }
+
+        .nav-item.active {
+            color: var(--primary-color);
+            background-color: rgba(37, 99, 235, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .more-menu {
+            display: none;
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 15px;
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            z-index: 99;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .more-menu.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .more-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--gray-800);
+            text-decoration: none;
+        }
+
+        .more-menu-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        .more-menu-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            color: var(--gray-600);
+        }
+
+        .more-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 98;
+        }
+
+        .more-overlay.active {
+            display: block;
+        }
+
         /* Add Case Form */
         .add-case-form {
             background-color: white;
@@ -354,6 +1196,30 @@
             resize: vertical;
         }
 
+        .add-case-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 40px 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 2px dashed var(--gray-300);
+        }
+
+        .add-case-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .add-case-description {
+            color: var(--gray-600);
+            margin-bottom: 20px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* File Upload */
         .file-upload-area {
             border: 2px dashed var(--gray-300);
             border-radius: 8px;
@@ -426,830 +1292,14 @@
             cursor: pointer;
         }
 
-        .add-case-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 40px 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border: 2px dashed var(--gray-300);
-        }
-
-        .add-case-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .add-case-description {
-            color: var(--gray-600);
-            margin-bottom: 20px;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            font-size: 14px;
-        }
-
-        .btn:hover {
-            background-color: var(--secondary-color);
-        }
-
-        .btn-secondary {
-            background-color: var(--gray-200);
-            color: var(--gray-800);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--gray-300);
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-        }
-
-        .btn-danger:hover {
-            background-color: #dc2626;
-        }
-
-        /* Documents */
-        .documents-summary {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            margin-bottom: 24px;
-            border: 1px solid var(--gray-200);
-        }
-
-        .documents-warning {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--warning-color);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        /* Updated Document Cards with borders */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .category-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--gray-200);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .category-info h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .category-status {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        .status-warning {
-            background-color: var(--warning-light);
-            color: #92400e;
-        }
-
-        .status-normal {
-            background-color: var(--success-light);
-            color: #065f46;
-        }
-
-        .status-expired {
-            background-color: var(--danger-light);
-            color: #991b1b;
-        }
-
-        .category-count {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .document-number {
-            font-size: 12px;
-            color: var(--gray-600);
-            margin-top: 4px;
-        }
-
-        /* Payments - Updated with borders */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .service-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-200);
-            transition: transform 0.2s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .service-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .service-description {
-            color: var(--gray-600);
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .service-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        .history-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 40px 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            color: var(--gray-600);
-            border: 1px solid var(--gray-200);
-        }
-
-        /* Profile - Updated with visible borders and emphasized settings */
-        .profile-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            max-width: 500px;
-            border: 1px solid var(--gray-200);
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--gray-100);
-        }
-
-        .profile-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .profile-info h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .profile-info p {
-            color: var(--gray-600);
-        }
-
-        .settings-section {
-            margin-bottom: 24px;
-            padding: 20px;
-            border: 1px solid var(--gray-200);
-            border-radius: 10px;
-            background-color: var(--gray-50);
-        }
-
-        .settings-section.settings-emphasis {
-            border-left: 4px solid var(--primary-color);
-            background-color: white;
-        }
-
-        .settings-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: var(--gray-800);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .settings-title.settings-emphasis {
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--gray-100);
-            cursor: pointer;
-            transition: background-color 0.2s;
-            border-radius: 6px;
-            padding-left: 8px;
-            padding-right: 8px;
-        }
-
-        .setting-item:hover {
-            background-color: var(--gray-100);
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h4 {
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-
-        .setting-info p {
-            font-size: 12px;
-            color: var(--gray-600);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--gray-300);
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--primary-color);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
-        .language-select {
-            padding: 8px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--gray-300);
-            background-color: white;
-            color: var(--gray-800);
-            font-weight: 500;
-            width: 150px;
-        }
-
-        .logout-btn {
-            background-color: #ef4444;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            width: 100%;
-            margin-top: 20px;
-            font-size: 16px;
-        }
-
-        .logout-btn:hover {
-            background-color: #dc2626;
-        }
-
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: white;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            padding: 12px 0;
-            z-index: 100;
-        }
-
-        .nav-items {
-            display: flex;
-            justify-content: space-around;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: var(--gray-600);
-            font-size: 12px;
-            transition: color 0.2s;
-            padding: 4px 8px;
-            border-radius: 8px;
-        }
-
-        .nav-item.active {
-            color: var(--primary-color);
-            background-color: rgba(37, 99, 235, 0.1);
-        }
-
-        .nav-icon {
-            font-size: 20px;
-            margin-bottom: 4px;
-        }
-
-        /* Systems Section */
-        .systems-section {
-            margin-top: 40px;
-            padding: 30px 0;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            border: 1px solid var(--gray-200);
-        }
-
-        .section-subtitle {
-            color: var(--gray-600);
-            font-size: 16px;
-            margin-bottom: 30px;
-            max-width: 800px;
-        }
-
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .system-card {
-            background-color: var(--gray-50);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--primary-color);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .system-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .system-card h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--primary-color);
-        }
-
-        .system-card p {
-            color: var(--gray-600);
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .external-link {
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .webview-container {
-            display: none;
-            background-color: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-top: 30px;
-            border: 1px solid var(--gray-200);
-        }
-
-        .webview-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background-color: var(--gray-100);
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .webview-header h3 {
-            margin: 0;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .close-webview {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--gray-600);
-            line-height: 1;
-        }
-
-        .webview-loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 50px;
-        }
-
-        .webview-loading-spinner {
-            border: 4px solid var(--gray-200);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .webview-frame {
-            width: 100%;
-            height: 500px;
-            border: none;
-        }
-
-        /* Notifications Page */
-        .notifications-container {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 0;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            overflow: hidden;
-        }
-
-        .notification-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .notification-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .notification-list {
-            max-height: 500px;
-            overflow-y: auto;
-        }
-
-        .no-notifications {
-            text-align: center;
-            color: var(--gray-600);
-            padding: 40px;
-        }
-
-        .notification-item {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: background-color 0.2s;
-        }
-
-        .notification-item:hover {
-            background-color: var(--gray-50);
-        }
-
-        .notification-item.unread {
-            background-color: var(--primary-light);
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .notification-item.read {
-            opacity: 0.8;
-        }
-
-        .notification-content {
-            flex-grow: 1;
-        }
-
-        .notification-title {
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .notification-message {
-            color: var(--gray-600);
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .notification-date {
-            font-size: 12px;
-            color: var(--gray-500);
-        }
-
-        .notification-actions-item {
-            display: flex;
-            gap: 8px;
-        }
-
-        .notification-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-            transition: background-color 0.2s;
-        }
-
-        .btn-mark-read {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-mark-read:hover {
-            background-color: #0da271;
-        }
-
-        .btn-delete {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-delete:hover {
-            background-color: #dc2626;
-        }
-
-        .btn-mark-all-read {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .btn-delete-all {
-            background-color: var(--danger-color);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .modal-content {
-            background-color: white;
-            border-radius: var(--border-radius);
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--gray-800);
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            color: var(--gray-600);
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .payment-methods {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .payment-method {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px;
-            border: 1px solid var(--gray-300);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-
-        .payment-method:hover {
-            border-color: var(--primary-color);
-            background-color: var(--gray-50);
-        }
-
-        .payment-method.active {
-            border-color: var(--primary-color);
-            background-color: var(--primary-light);
-        }
-
-        .payment-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-        }
-
-        .payment-icon.credit {
-            background-color: #3b82f6;
-        }
-
-        .payment-icon.paypal {
-            background-color: #00457c;
-        }
-
-        .payment-icon.apple {
-            background-color: #000000;
-        }
-
-        .chat-container {
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 15px;
-            background-color: var(--gray-50);
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        .message {
-            padding: 10px 15px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            max-width: 80%;
-        }
-
-        .message.user {
-            background-color: var(--primary-color);
-            color: white;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-
-        .message.support {
-            background-color: white;
-            border: 1px solid var(--gray-300);
-            align-self: flex-start;
-        }
-
-        .chat-input-area {
-            display: flex;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex-grow: 1;
-            padding: 12px;
-            border: 1px solid var(--gray-300);
-            border-radius: 8px;
-        }
-
-        .checkout-form .form-group {
-            margin-bottom: 15px;
-        }
-
         /* Responsive */
         @media (min-width: 768px) {
             body {
                 padding-bottom: 0;
             }
             
-            .bottom-nav {
-                display: none;
+            .bottom-nav, .more-menu, .more-overlay {
+                display: none !important;
             }
             
             .desktop-nav {
@@ -1279,6 +1329,7 @@
                 width: 100%;
                 border-radius: 8px;
                 font-size: 14px;
+                max-width: 100%;
             }
             
             .desktop-nav .nav-icon {
@@ -1338,6 +1389,23 @@
             .page-title {
                 font-size: 24px;
             }
+
+            .nav-item span {
+                font-size: 10px;
+            }
+
+            .more-menu {
+                bottom: 55px;
+            }
+
+            .notification-actions {
+                justify-content: center;
+            }
+
+            .notification-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
     </style>
 </head>
@@ -1383,8 +1451,7 @@
             <div class="header-content">
                 <div class="logo mobile-logo">CentralTech</div>
                 <div class="user-info">
-                    <div class="user-avatar">EJ</div>
-                    <span class="user-name">edv.jr@email.com</span>
+                    <div class="user-avatar" id="user-avatar">EJ</div>
                 </div>
             </div>
         </header>
@@ -1394,10 +1461,10 @@
             <div class="page-title">
                 <div class="page-title-text">
                     <span>Bem-vindo ao seu painel</span>
-                    <div class="notification-bell" id="notificationBell">
+                    <button class="notification-bell" id="notificationBell">
                         <i class="fas fa-bell"></i>
                         <span class="notification-badge" id="notificationBadge" style="display: none;">0</span>
-                    </div>
+                    </button>
                 </div>
             </div>
             
@@ -1410,73 +1477,82 @@
                 <a href="#" class="alert-link" id="view-document">Ver Documento</a>
             </div>
             
-            <!-- Summary Cards -->
+            <!-- Summary Cards with icons -->
             <div class="summary-cards">
                 <div class="summary-card">
+                    <div class="summary-icon cases">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
                     <div class="summary-number">1</div>
                     <div class="summary-label">Casos Ativos</div>
                 </div>
                 <div class="summary-card">
+                    <div class="summary-icon documents">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
                     <div class="summary-number">3</div>
                     <div class="summary-label">Documentos</div>
                 </div>
                 <div class="summary-card">
+                    <div class="summary-icon payments">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
                     <div class="summary-number">$0</div>
                     <div class="summary-label">Pagamentos</div>
                 </div>
             </div>
             
-            <!-- Systems Section (na Home) -->
-            <section class="systems-section" id="systems-section">
-                <div class="container">
-                    <h2 class="section-title">Sistemas Oficiais de Consulta</h2>
-                    <p class="section-subtitle">Acesse diretamente os sistemas governamentais para consultar seus processos migratórios</p>
-                    
-                    <div class="systems-grid">
-                        <div class="system-card eoir-card">
-                            <h3>EOIR – Processos de Imigração</h3>
-                            <p>Consulta de casos na Corte de Imigração (EOIR). Acompanhe o status do seu processo diretamente no sistema do Departamento de Justiça dos EUA.</p>
-                            <button class="btn" id="eoirBtn">
-                                <i class="fas fa-external-link-alt"></i> Acessar EOIR
+           <!-- Quick Actions -->
+            
+            <!-- Systems Section -->
+            <section class="systems-section">
+                <h2 class="section-title">Sistemas Oficiais de Consulta</h2>
+                <p class="section-subtitle">Acesse diretamente os sistemas governamentais para consultar seus processos migratórios</p>
+                
+                <div class="systems-grid">
+                    <div class="system-card">
+                        <h3>EOIR – Processos de Imigração</h3>
+                        <p>Consulta de casos na Corte de Imigração (EOIR). Acompanhe o status do seu processo diretamente no sistema do Departamento de Justiça dos EUA.</p>
+                        <button class="btn" id="eoirBtn">
+                            <i class="fas fa-external-link-alt"></i> Acessar EOIR
+                        </button>
+                    </div>
+
+                    <div class="system-card">
+                        <h3>USCIS – Status de Processos</h3>
+                        <p>Verifique o status de petições e formulários USCIS. Consulte processos de residência, cidadania e autorizações de trabalho.</p>
+                        <a href="https://egov.uscis.gov/" target="_blank" class="external-link">
+                            <button class="btn">
+                                <i class="fas fa-external-link-alt"></i> Acessar USCIS
                             </button>
-                        </div>
-
-                        <div class="system-card uscis-card">
-                            <h3>USCIS – Status de Processos</h3>
-                            <p>Verifique o status de petições e formulários USCIS. Consulte processos de residência, cidadania e autorizações de trabalho.</p>
-                            <a href="https://egov.uscis.gov/" target="_blank" class="external-link">
-                                <button class="btn">
-                                    <i class="fas fa-external-link-alt"></i> Acessar USCIS
-                                </button>
-                            </a>
-                        </div>
-
-                        <div class="system-card i94-card">
-                            <h3>I-94 – Registro de Entrada</h3>
-                            <p>Consulta do histórico recente do formulário I-94. Verifique seu registro de entrada e saída dos Estados Unidos.</p>
-                            <a href="https://i94.cbp.dhs.gov/I94/#/home" target="_blank" class="external-link">
-                                <button class="btn">
-                                    <i class="fas fa-external-link-alt"></i> Acessar I-94
-                                </button>
-                            </a>
-                        </div>
+                        </a>
                     </div>
-                    
-                    <!-- WebView Container (inicialmente escondido) -->
-                    <div class="webview-container" id="webviewContainer">
-                        <div class="webview-header">
-                            <h3 id="webviewTitle"><i class="fas fa-globe"></i> Sistema de Consulta</h3>
-                            <button class="close-webview" id="closeWebview">&times;</button>
-                        </div>
-                        <div id="webviewLoading" class="webview-loading" style="display: none;">
-                            <div class="webview-loading-spinner"></div>
-                            <p>Carregando sistema...</p>
-                        </div>
-                        <div id="webviewError" class="error-message" style="display: none;">
-                            Não foi possível carregar o sistema. Verifique sua conexão ou tente novamente.
-                        </div>
-                        <iframe class="webview-frame" id="webviewFrame" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
+
+                    <div class="system-card">
+                        <h3>I-94 – Registro de Entrada</h3>
+                        <p>Consulta do histórico recente do formulário I-94. Verifique seu registro de entrada e saída dos Estados Unidos.</p>
+                        <a href="https://i94.cbp.dhs.gov/I94/#/home" target="_blank" class="external-link">
+                            <button class="btn">
+                                <i class="fas fa-external-link-alt"></i> Acessar I-94
+                            </button>
+                        </a>
                     </div>
+                </div>
+                
+                <!-- WebView Container -->
+                <div class="webview-container" id="webviewContainer">
+                    <div class="webview-header">
+                        <h3 id="webviewTitle"><i class="fas fa-globe"></i> Sistema de Consulta</h3>
+                        <button class="close-webview" id="closeWebview">&times;</button>
+                    </div>
+                    <div id="webviewLoading" class="webview-loading" style="display: none;">
+                        <div class="webview-loading-spinner"></div>
+                        <p>Carregando sistema...</p>
+                    </div>
+                    <div id="webviewError" class="error-message" style="display: none;">
+                        Não foi possível carregar o sistema. Verifique sua conexão ou tente novamente.
+                    </div>
+                    <iframe class="webview-frame" id="webviewFrame" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
                 </div>
             </section>
         </section>
@@ -1574,6 +1650,9 @@
             
             <div class="category-grid">
                 <div class="category-card">
+                    <div class="category-icon ead">
+                        <i class="fas fa-id-card"></i>
+                    </div>
                     <div class="category-info">
                         <h3>Work Permit (EAD)</h3>
                         <div class="category-status status-warning">Vencendo</div>
@@ -1583,6 +1662,9 @@
                 </div>
                 
                 <div class="category-card">
+                    <div class="category-icon passport">
+                        <i class="fas fa-passport"></i>
+                    </div>
                     <div class="category-info">
                         <h3>Passaporte</h3>
                         <div class="category-status status-normal">Ativo</div>
@@ -1592,6 +1674,9 @@
                 </div>
                 
                 <div class="category-card">
+                    <div class="category-icon license">
+                        <i class="fas fa-id-card-alt"></i>
+                    </div>
                     <div class="category-info">
                         <h3>Driver License</h3>
                         <div class="category-status status-normal">Ativo</div>
@@ -1601,6 +1686,9 @@
                 </div>
                 
                 <div class="category-card">
+                    <div class="category-icon receipt">
+                        <i class="fas fa-receipt"></i>
+                    </div>
                     <div class="category-info">
                         <h3>Receipt Notice</h3>
                         <div class="category-status status-expired">Vencido</div>
@@ -1610,6 +1698,9 @@
                 </div>
                 
                 <div class="category-card">
+                    <div class="category-icon i94">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
                     <div class="category-info">
                         <h3>I-94</h3>
                         <div class="category-status status-normal">Ativo</div>
@@ -1619,6 +1710,9 @@
                 </div>
                 
                 <div class="category-card">
+                    <div class="category-icon other">
+                        <i class="fas fa-folder"></i>
+                    </div>
                     <div class="category-info">
                         <h3>Outros</h3>
                         <div class="category-status status-normal">Ativo</div>
@@ -1670,8 +1764,15 @@
                         <p id="notification-count">0 não lidas</p>
                     </div>
                     <div class="notification-actions">
-                        <button class="btn btn-secondary" id="markAllRead">Marcar todas como lida</button>
-                        <button class="btn btn-danger" id="deleteAllNotifications">Apagar todas</button>
+                        <button class="btn btn-danger" id="deleteSelectedNotifications">
+                            <i class="fas fa-trash"></i> Apagar selecionadas
+                        </button>
+                        <button class="btn btn-success" id="markAllRead">
+                            <i class="fas fa-check-double"></i> Marcar todas como lida
+                        </button>
+                        <button class="btn btn-danger" id="deleteAllNotifications">
+                            <i class="fas fa-trash-alt"></i> Apagar todas
+                        </button>
                     </div>
                 </div>
                 
@@ -1689,55 +1790,53 @@
             <h1 class="page-title">Sistemas Oficiais</h1>
             
             <div class="systems-section">
-                <div class="container">
-                    <h2 class="section-title">Sistemas Oficiais de Consulta</h2>
-                    <p class="section-subtitle">Acesse diretamente os sistemas governamentais para consultar seus processos migratórios</p>
-                    
-                    <div class="systems-grid">
-                        <div class="system-card eoir-card">
-                            <h3>EOIR – Processos de Imigração</h3>
-                            <p>Consulta de casos na Corte de Imigração (EOIR). Acompanhe o status do seu processo diretamente no sistema do Departamento de Justiça dos EUA.</p>
-                            <button class="btn" id="eoirBtn2">
-                                <i class="fas fa-external-link-alt"></i> Acessar EOIR
+                <h2 class="section-title">Sistemas Oficiais de Consulta</h2>
+                <p class="section-subtitle">Acesse diretamente os sistemas governamentais para consultar seus processos migratórios</p>
+                
+                <div class="systems-grid">
+                    <div class="system-card">
+                        <h3>EOIR – Processos de Imigração</h3>
+                        <p>Consulta de casos na Corte de Imigração (EOIR). Acompanhe o status do seu processo diretamente no sistema do Departamento de Justiça dos EUA.</p>
+                        <button class="btn" id="eoirBtn2">
+                            <i class="fas fa-external-link-alt"></i> Acessar EOIR
+                        </button>
+                    </div>
+
+                    <div class="system-card">
+                        <h3>USCIS – Status de Processos</h3>
+                        <p>Verifique o status de petições e formulários USCIS. Consulte processos de residência, cidadania e autorizações de trabalho.</p>
+                        <a href="https://egov.uscis.gov/" target="_blank" class="external-link">
+                            <button class="btn">
+                                <i class="fas fa-external-link-alt"></i> Acessar USCIS
                             </button>
-                        </div>
-
-                        <div class="system-card uscis-card">
-                            <h3>USCIS – Status de Processos</h3>
-                            <p>Verifique o status de petições e formulários USCIS. Consulte processos de residência, cidadania e autorizações de trabalho.</p>
-                            <a href="https://egov.uscis.gov/" target="_blank" class="external-link">
-                                <button class="btn">
-                                    <i class="fas fa-external-link-alt"></i> Acessar USCIS
-                                </button>
-                            </a>
-                        </div>
-
-                        <div class="system-card i94-card">
-                            <h3>I-94 – Registro de Entrada</h3>
-                            <p>Consulta do histórico recente do formulário I-94. Verifique seu registro de entrada e saída dos Estados Unidos.</p>
-                            <a href="https://i94.cbp.dhs.gov/I94/#/home" target="_blank" class="external-link">
-                                <button class="btn">
-                                    <i class="fas fa-external-link-alt"></i> Acessar I-94
-                                </button>
-                            </a>
-                        </div>
+                        </a>
                     </div>
-                    
-                    <!-- WebView Container (inicialmente escondido) -->
-                    <div class="webview-container" id="webviewContainer2">
-                        <div class="webview-header">
-                            <h3 id="webviewTitle2"><i class="fas fa-globe"></i> Sistema de Consulta</h3>
-                            <button class="close-webview" id="closeWebview2">&times;</button>
-                        </div>
-                        <div id="webviewLoading2" class="webview-loading" style="display: none;">
-                            <div class="webview-loading-spinner"></div>
-                            <p>Carregando sistema...</p>
-                        </div>
-                        <div id="webviewError2" class="error-message" style="display: none;">
-                            Não foi possível carregar o sistema. Verifique sua conexão ou tente novamente.
-                        </div>
-                        <iframe class="webview-frame" id="webviewFrame2" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
+
+                    <div class="system-card">
+                        <h3>I-94 – Registro de Entrada</h3>
+                        <p>Consulta do histórico recente do formulário I-94. Verifique seu registro de entrada e saída dos Estados Unidos.</p>
+                        <a href="https://i94.cbp.dhs.gov/I94/#/home" target="_blank" class="external-link">
+                            <button class="btn">
+                                <i class="fas fa-external-link-alt"></i> Acessar I-94
+                            </button>
+                        </a>
                     </div>
+                </div>
+                
+                <!-- WebView Container -->
+                <div class="webview-container" id="webviewContainer2">
+                    <div class="webview-header">
+                        <h3 id="webviewTitle2"><i class="fas fa-globe"></i> Sistema de Consulta</h3>
+                        <button class="close-webview" id="closeWebview2">&times;</button>
+                    </div>
+                    <div id="webviewLoading2" class="webview-loading" style="display: none;">
+                        <div class="webview-loading-spinner"></div>
+                        <p>Carregando sistema...</p>
+                    </div>
+                    <div id="webviewError2" class="error-message" style="display: none;">
+                        Não foi possível carregar o sistema. Verifique sua conexão ou tente novamente.
+                    </div>
+                    <iframe class="webview-frame" id="webviewFrame2" src="" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"></iframe>
                 </div>
             </div>
         </section>
@@ -1746,81 +1845,83 @@
         <section id="profile-page" class="page-content">
             <h1 class="page-title">Perfil</h1>
             
-            <div class="profile-card">
+            <div class="profile-section">
                 <div class="profile-header">
-                    <div class="profile-avatar">U</div>
+                    <div class="profile-avatar-large">EJ</div>
                     <div class="profile-info">
-                        <h2>Edv.Jr</h2>
+                        <h2>Edvaldo Júnior</h2>
                         <p>edv.jr@email.com</p>
                     </div>
                 </div>
-                
-                <div class="settings-section">
-                    <h3 class="settings-title"><i class="fas fa-language"></i> Idioma</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Idioma do Sistema</h4>
-                        </div>
-                        <select class="language-select" id="language-select">
-                            <option value="en">English</option>
-                            <option value="pt" selected>Português</option>
-                            <option value="es">Español</option>
-                        </select>
+            </div>
+            
+            <div class="profile-section">
+                <h3 class="profile-section-title"><i class="fas fa-language"></i> Idioma</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Idioma do Sistema</h4>
                     </div>
+                    <select class="language-select" id="language-select">
+                        <option value="en">English</option>
+                        <option value="pt" selected>Português</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3 class="profile-section-title"><i class="fas fa-bell"></i> Notificações</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Push Alerts</h4>
+                        <p>Notificações no navegador</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="push-alerts" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
                 </div>
                 
-                <div class="settings-section">
-                    <h3 class="settings-title"><i class="fas fa-bell"></i> Notificações</h3>
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Push Alerts</h4>
-                            <p>Notificações no navegador</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="push-alerts" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Email</h4>
+                        <p>Notificações por email</p>
                     </div>
-                    
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h4>Email</h4>
-                            <p>Notificações por email</p>
-                        </div>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="email-notifications" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="email-notifications" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="profile-section settings-emphasis">
+                <h3 class="profile-section-title settings-emphasis"><i class="fas fa-cog"></i> CONFIGURAÇÕES</h3>
+                <div class="setting-item" id="payment-methods-btn">
+                    <div class="setting-info">
+                        <h4>Payment Methods</h4>
+                        <p>Gerencie suas formas de pagamento</p>
                     </div>
+                    <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
                 </div>
                 
-                <div class="settings-section settings-emphasis">
-                    <h3 class="settings-title settings-emphasis"><i class="fas fa-cog"></i> CONFIGURAÇÕES</h3>
-                    <div class="setting-item" id="payment-methods-btn">
-                        <div class="setting-info">
-                            <h4>Payment Methods</h4>
-                            <p>Gerencie suas formas de pagamento</p>
-                        </div>
-                        <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
+                <div class="setting-item" id="privacy-consents-btn">
+                    <div class="setting-info">
+                        <h4>Privacy and Consents</h4>
+                        <p>Política de privacidade e consentimentos</p>
                     </div>
-                    
-                    <div class="setting-item" id="privacy-consents-btn">
-                        <div class="setting-info">
-                            <h4>Privacy and Consents</h4>
-                            <p>Política de privacidade e consentimentos</p>
-                        </div>
-                        <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
-                    </div>
-                    
-                    <div class="setting-item" id="help-support-btn">
-                        <div class="setting-info">
-                            <h4>Help and Support</h4>
-                            <p>Suporte e ajuda</p>
-                        </div>
-                        <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
-                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
                 </div>
                 
+                <div class="setting-item" id="help-support-btn">
+                    <div class="setting-info">
+                        <h4>Help and Support</h4>
+                        <p>Suporte e ajuda</p>
+                    </div>
+                    <i class="fas fa-chevron-right" style="color: var(--gray-400);"></i>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
                 <button class="logout-btn" id="logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </button>
@@ -1841,26 +1942,35 @@
             </a>
             <a href="#" class="nav-item" data-page="documents">
                 <i class="fas fa-file-alt nav-icon"></i>
-                <span>Documents</span>
+                <span>Docs</span>
             </a>
-            <a href="#" class="nav-item" data-page="payments">
-                <i class="fas fa-credit-card nav-icon"></i>
-                <span>Payments</span>
-            </a>
-            <a href="#" class="nav-item" data-page="notifications">
-                <i class="fas fa-bell nav-icon"></i>
-                <span>Notificações</span>
-            </a>
-            <a href="#" class="nav-item" data-page="systems">
-                <i class="fas fa-globe nav-icon"></i>
-                <span>Sistemas</span>
-            </a>
-            <a href="#" class="nav-item" data-page="profile">
-                <i class="fas fa-user nav-icon"></i>
-                <span>Profile</span>
+            <a href="#" class="nav-item" id="more-menu-toggle">
+                <i class="fas fa-ellipsis-h nav-icon"></i>
+                <span>Mais</span>
             </a>
         </div>
     </nav>
+
+    <!-- More Menu for Mobile -->
+    <div class="more-overlay" id="more-overlay"></div>
+    <div class="more-menu" id="more-menu">
+        <a href="#" class="more-menu-item" data-page="payments">
+            <i class="fas fa-credit-card more-menu-icon"></i>
+            <span>Payments</span>
+        </a>
+        <a href="#" class="more-menu-item" data-page="notifications">
+            <i class="fas fa-bell more-menu-icon"></i>
+            <span>Notificações</span>
+        </a>
+        <a href="#" class="more-menu-item" data-page="systems">
+            <i class="fas fa-globe more-menu-icon"></i>
+            <span>Sistemas</span>
+        </a>
+        <a href="#" class="more-menu-item" data-page="profile">
+            <i class="fas fa-user more-menu-icon"></i>
+            <span>Profile</span>
+        </a>
+    </div>
 
     <!-- Payment Methods Modal -->
     <div class="modal" id="payment-methods-modal">
@@ -1871,41 +1981,31 @@
             </div>
             <p>Selecione sua forma de pagamento preferida:</p>
             
-            <div class="payment-methods">
-                <div class="payment-method active" data-method="credit">
-                    <div class="payment-icon credit">
+            <div class="payment-methods" style="margin: 20px 0;">
+                <div class="payment-method active" data-method="credit" style="display: flex; align-items: center; padding: 15px; border: 1px solid var(--gray-300); border-radius: 8px; margin-bottom: 10px; cursor: pointer;">
+                    <div class="payment-icon" style="width: 40px; height: 40px; border-radius: 8px; background-color: #3b82f6; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; margin-right: 12px;">
                         <i class="far fa-credit-card"></i>
                     </div>
                     <div>
-                        <h4>Cartão de Crédito</h4>
-                        <p>Visa, Mastercard, American Express</p>
+                        <h4 style="margin: 0 0 5px 0;">Cartão de Crédito</h4>
+                        <p style="margin: 0; color: var(--gray-600); font-size: 14px;">Visa, Mastercard, American Express</p>
                     </div>
                 </div>
                 
-                <div class="payment-method" data-method="paypal">
-                    <div class="payment-icon paypal">
+                <div class="payment-method" data-method="paypal" style="display: flex; align-items: center; padding: 15px; border: 1px solid var(--gray-300); border-radius: 8px; margin-bottom: 10px; cursor: pointer;">
+                    <div class="payment-icon" style="width: 40px; height: 40px; border-radius: 8px; background-color: #00457c; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; margin-right: 12px;">
                         <i class="fab fa-paypal"></i>
                     </div>
                     <div>
-                        <h4>PayPal</h4>
-                        <p>Pague com sua conta PayPal</p>
-                    </div>
-                </div>
-                
-                <div class="payment-method" data-method="apple">
-                    <div class="payment-icon apple">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                    <div>
-                        <h4>Apple Pay</h4>
-                        <p>Pague com Apple Pay</p>
+                        <h4 style="margin: 0 0 5px 0;">PayPal</h4>
+                        <p style="margin: 0; color: var(--gray-600); font-size: 14px;">Pague com sua conta PayPal</p>
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 20px;">
-                <button class="btn" id="save-payment-method">Salvar Método de Pagamento</button>
-                <button class="btn btn-secondary" id="cancel-payment-modal" style="margin-left: 10px;">Cancelar</button>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn" id="save-payment-method">Salvar Método</button>
+                <button class="btn btn-secondary" id="cancel-payment-modal">Cancelar</button>
             </div>
         </div>
     </div>
@@ -1928,28 +2028,22 @@
                 <h5>Como usamos suas informações</h5>
                 <p style="margin-bottom: 15px;">Utilizamos suas informações para fornecer nossos serviços, processar pagamentos, enviar atualizações importantes sobre seus casos e melhorar nossa plataforma.</p>
                 
-                <h5>Compartilhamento de informações</h5>
-                <p style="margin-bottom: 15px;">Não compartilhamos suas informações pessoais com terceiros, exceto quando necessário para fornecer nossos serviços ou conforme exigido por lei.</p>
-                
-                <h5>Seus direitos</h5>
-                <p style="margin-bottom: 15px;">Você tem o direito de acessar, corrigir ou excluir suas informações pessoais a qualquer momento.</p>
-                
                 <div style="margin-top: 20px;">
                     <label style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 15px;">
-                        <input type="checkbox" id="privacy-consent" checked>
+                        <input type="checkbox" id="privacy-consent" checked style="margin-top: 3px;">
                         <span>Eu concordo com a Política de Privacidade e os Termos de Serviço</span>
                     </label>
                     
                     <label style="display: flex; align-items: flex-start; gap: 10px;">
-                        <input type="checkbox" id="marketing-consent">
+                        <input type="checkbox" id="marketing-consent" style="margin-top: 3px;">
                         <span>Eu concordo em receber comunicações de marketing e atualizações sobre serviços</span>
                     </label>
                 </div>
             </div>
             
-            <div style="margin-top: 20px;">
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
                 <button class="btn" id="save-consents">Salvar Preferências</button>
-                <button class="btn btn-secondary" id="cancel-privacy-modal" style="margin-left: 10px;">Fechar</button>
+                <button class="btn btn-secondary" id="cancel-privacy-modal">Fechar</button>
             </div>
         </div>
     </div>
@@ -1962,21 +2056,18 @@
                 <button class="modal-close" id="close-help-modal">&times;</button>
             </div>
             
-            <div class="chat-container">
-                <div class="chat-messages" id="chat-messages">
-                    <div class="message support">
+            <div class="chat-container" style="height: 300px; display: flex; flex-direction: column;">
+                <div class="chat-messages" id="chat-messages" style="flex-grow: 1; overflow-y: auto; padding: 15px; background-color: var(--gray-50); border-radius: 8px; margin-bottom: 15px;">
+                    <div class="message support" style="padding: 10px 15px; border-radius: 18px; margin-bottom: 10px; max-width: 80%; background-color: white; border: 1px solid var(--gray-300); align-self: flex-start;">
                         Olá! Sou o suporte da CentralTech. Como posso ajudá-lo hoje?
                     </div>
-                    <div class="message user">
+                    <div class="message user" style="padding: 10px 15px; border-radius: 18px; margin-bottom: 10px; max-width: 80%; background-color: var(--primary-color); color: white; align-self: flex-end; margin-left: auto;">
                         Preciso de ajuda com a renovação do meu EAD.
-                    </div>
-                    <div class="message support">
-                        Claro! Posso ajudá-lo com isso. Primeiro, verifique se todos os seus documentos estão atualizados no sistema.
                     </div>
                 </div>
                 
-                <div class="chat-input-area">
-                    <input type="text" class="chat-input" id="chat-input" placeholder="Digite sua mensagem...">
+                <div class="chat-input-area" style="display: flex; gap: 10px;">
+                    <input type="text" class="chat-input" id="chat-input" placeholder="Digite sua mensagem..." style="flex-grow: 1; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px;">
                     <button class="btn" id="send-message">Enviar</button>
                 </div>
             </div>
@@ -2041,8 +2132,11 @@
         // Navegação entre páginas
         document.addEventListener('DOMContentLoaded', function() {
             // Elementos de navegação
-            const navItems = document.querySelectorAll('.nav-item');
+            const navItems = document.querySelectorAll('.nav-item, .more-menu-item');
             const pageContents = document.querySelectorAll('.page-content');
+            const moreMenuToggle = document.getElementById('more-menu-toggle');
+            const moreMenu = document.getElementById('more-menu');
+            const moreOverlay = document.getElementById('more-overlay');
             
             // Função para trocar de página
             function showPage(pageId) {
@@ -2081,6 +2175,12 @@
                     };
                     document.title = `CentralTech - ${titles[pageId]}`;
                 }
+                
+                // Fechar o menu mais no mobile
+                if (window.innerWidth < 768) {
+                    moreMenu.classList.remove('active');
+                    moreOverlay.classList.remove('active');
+                }
             }
             
             // Adicionar eventos de clique nos itens de navegação
@@ -2088,14 +2188,32 @@
                 item.addEventListener('click', function(e) {
                     e.preventDefault();
                     const pageId = this.getAttribute('data-page');
-                    showPage(pageId);
-                    
-                    // Se for a página de notificações, atualizar o badge
-                    if (pageId === 'notifications') {
-                        updateNotificationBell();
-                        renderNotifications();
+                    if (pageId) {
+                        showPage(pageId);
                     }
                 });
+            });
+            
+            // Toggle do menu mais no mobile
+            if (moreMenuToggle) {
+                moreMenuToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    moreMenu.classList.toggle('active');
+                    moreOverlay.classList.toggle('active');
+                });
+            }
+            
+            // Fechar o menu mais quando clicar no overlay
+            if (moreOverlay) {
+                moreOverlay.addEventListener('click', function() {
+                    moreMenu.classList.remove('active');
+                    moreOverlay.classList.remove('active');
+                });
+            }
+            
+            // Avatar clicável - redireciona para profile
+            document.getElementById('user-avatar').addEventListener('click', function() {
+                showPage('profile');
             });
             
             // Data de expiração dinâmica
@@ -2480,6 +2598,7 @@
                 // Adicionar mensagem do usuário
                 const userMessage = document.createElement('div');
                 userMessage.className = 'message user';
+                userMessage.style.cssText = 'padding: 10px 15px; border-radius: 18px; margin-bottom: 10px; max-width: 80%; background-color: var(--primary-color); color: white; align-self: flex-end; margin-left: auto;';
                 userMessage.textContent = message;
                 chatMessages.appendChild(userMessage);
                 
@@ -2499,6 +2618,7 @@
                     
                     const supportMessage = document.createElement('div');
                     supportMessage.className = 'message support';
+                    supportMessage.style.cssText = 'padding: 10px 15px; border-radius: 18px; margin-bottom: 10px; max-width: 80%; background-color: white; border: 1px solid var(--gray-300); align-self: flex-start;';
                     supportMessage.textContent = randomResponse;
                     chatMessages.appendChild(supportMessage);
                     
@@ -2510,34 +2630,13 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            // Logout button - REDIRECIONA PARA INDEX.HTML
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    if (confirm('Tem certeza que deseja sair?')) {
-                        // Redirecionar para a página de login (index.html)
-                        window.location.href = 'index.html';
-                    }
-                });
-            }
-            
-            // Configurações do perfil
-            document.getElementById('language-select')?.addEventListener('change', function() {
-                const language = this.value;
-                const languageNames = {
-                    'en': 'inglês',
-                    'pt': 'português',
-                    'es': 'espanhol'
-                };
-                alert(`Idioma alterado para ${languageNames[language]}. Em uma aplicação real, isso atualizaria as preferências do usuário.`);
-            });
-            
             // Notifications System
             const notificationBell = document.getElementById('notificationBell');
             const notificationBadge = document.getElementById('notificationBadge');
             const notificationList = document.getElementById('notificationList');
             const noNotifications = document.getElementById('noNotifications');
             const notificationCount = document.getElementById('notification-count');
+            const deleteSelectedNotificationsBtn = document.getElementById('deleteSelectedNotifications');
             const markAllReadBtn = document.getElementById('markAllRead');
             const deleteAllNotificationsBtn = document.getElementById('deleteAllNotifications');
             
@@ -2582,75 +2681,99 @@
                     const notificationElement = document.createElement('div');
                     notificationElement.className = `notification-item ${notification.read ? 'read' : 'unread'}`;
                     notificationElement.innerHTML = `
+                        <div class="notification-checkbox">
+                            <input type="checkbox" class="notification-select" data-id="${notification.id}">
+                        </div>
                         <div class="notification-content">
                             <div class="notification-title">
+                                <i class="fas fa-${
+                                    notification.type === 'warning' ? 'exclamation-triangle' :
+                                    notification.type === 'success' ? 'check-circle' : 'info-circle'
+                                } notification-type-icon ${notification.type}"></i>
                                 ${notification.title}
-                                ${notification.read ? '<i class="fas fa-check-circle" style="color: var(--success-color); font-size: 12px;"></i>' : ''}
+                                ${notification.read ? '<i class="fas fa-check-circle" style="color: var(--success-color); font-size: 12px; margin-left: 5px;"></i>' : ''}
                             </div>
                             <div class="notification-message">${notification.message}</div>
-                            <div class="notification-date">${notification.date}</div>
-                        </div>
-                        <div class="notification-actions-item">
-                            ${!notification.read ? `<button class="notification-btn btn-mark-read" data-id="${notification.id}">Marcar como lida</button>` : ''}
-                            <button class="notification-btn btn-delete" data-id="${notification.id}">Apagar</button>
+                            <div class="notification-date">${formatDate(notification.date)}</div>
                         </div>
                     `;
                     notificationList.appendChild(notificationElement);
                 });
-                
-                // Adicionar eventos aos botões
-                document.querySelectorAll('.btn-mark-read').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = parseInt(this.getAttribute('data-id'));
-                        markNotificationAsRead(id);
-                    });
-                });
-                
-                document.querySelectorAll('.btn-delete').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = parseInt(this.getAttribute('data-id'));
-                        deleteNotification(id);
-                    });
+            }
+            
+            // Função para formatar data
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
                 });
             }
             
-            // Função para marcar notificação como lida
-            function markNotificationAsRead(id) {
-                const notificationIndex = notifications.findIndex(n => n.id === id);
-                if (notificationIndex !== -1) {
-                    notifications[notificationIndex].read = true;
-                    updateNotificationBell();
-                    renderNotifications();
-                }
+            // Função para obter notificações selecionadas
+            function getSelectedNotificationIds() {
+                const checkboxes = document.querySelectorAll('.notification-select:checked');
+                return Array.from(checkboxes).map(cb => parseInt(cb.getAttribute('data-id')));
             }
             
-            // Função para deletar notificação
-            function deleteNotification(id) {
-                notifications = notifications.filter(n => n.id !== id);
-                updateNotificationBell();
-                renderNotifications();
+            // Apagar notificações selecionadas
+            if (deleteSelectedNotificationsBtn) {
+                deleteSelectedNotificationsBtn.addEventListener('click', function() {
+                    const selectedIds = getSelectedNotificationIds();
+                    
+                    if (selectedIds.length === 0) {
+                        alert('Selecione pelo menos uma notificação para apagar.');
+                        return;
+                    }
+                    
+                    if (confirm(`Tem certeza que deseja apagar ${selectedIds.length} notificação(ões)?`)) {
+                        notifications = notifications.filter(n => !selectedIds.includes(n.id));
+                        updateNotificationBell();
+                        renderNotifications();
+                        showToast('Sucesso', `${selectedIds.length} notificação(ões) apagada(s).`, 'success');
+                    }
+                });
             }
             
             // Marcar todas como lidas
             if (markAllReadBtn) {
                 markAllReadBtn.addEventListener('click', function() {
+                    if (notifications.length === 0) {
+                        alert('Não há notificações para marcar como lidas.');
+                        return;
+                    }
+                    
+                    const unreadCount = notifications.filter(n => !n.read).length;
+                    
+                    if (unreadCount === 0) {
+                        alert('Todas as notificações já estão marcadas como lidas.');
+                        return;
+                    }
+                    
                     notifications.forEach(notification => {
                         notification.read = true;
                     });
+                    
                     updateNotificationBell();
                     renderNotifications();
-                    alert('Todas as notificações foram marcadas como lidas.');
+                    showToast('Sucesso', 'Todas as notificações foram marcadas como lidas.', 'success');
                 });
             }
             
             // Apagar todas as notificações
             if (deleteAllNotificationsBtn) {
                 deleteAllNotificationsBtn.addEventListener('click', function() {
-                    if (confirm('Tem certeza que deseja apagar todas as notificações?')) {
+                    if (notifications.length === 0) {
+                        alert('Não há notificações para apagar.');
+                        return;
+                    }
+                    
+                    if (confirm('Tem certeza que deseja apagar TODAS as notificações?')) {
                         notifications = [];
                         updateNotificationBell();
                         renderNotifications();
-                        alert('Todas as notificações foram apagadas.');
+                        showToast('Sucesso', 'Todas as notificações foram apagadas.', 'success');
                     }
                 });
             }
@@ -2660,6 +2783,17 @@
                 notificationBell.addEventListener('click', function() {
                     showPage('notifications');
                     renderNotifications();
+                });
+            }
+            
+            // Logout button - REDIRECIONA PARA INDEX.HTML
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function() {
+                    if (confirm('Tem certeza que deseja sair?')) {
+                        // Redirecionar para a página de login (index.html)
+                        window.location.href = 'index.html';
+                    }
                 });
             }
             
@@ -2759,22 +2893,35 @@
             
             // Função para mostrar toast
             function showToast(title, message, type = 'info') {
+                // Criar elemento toast
                 const toast = document.createElement('div');
                 toast.style.position = 'fixed';
                 toast.style.top = '20px';
                 toast.style.right = '20px';
-                toast.style.padding = '15px';
+                toast.style.padding = '15px 20px';
                 toast.style.backgroundColor = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6';
                 toast.style.color = 'white';
                 toast.style.borderRadius = '8px';
                 toast.style.zIndex = '10000';
                 toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                toast.innerHTML = `<strong>${title}</strong><br>${message}`;
+                toast.style.maxWidth = '400px';
+                toast.style.minWidth = '300px';
+                toast.innerHTML = `
+                    <div style="font-weight: 600; margin-bottom: 5px;">${title}</div>
+                    <div style="font-size: 14px;">${message}</div>
+                `;
                 
                 document.body.appendChild(toast);
                 
+                // Remover após 3 segundos
                 setTimeout(() => {
-                    document.body.removeChild(toast);
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s';
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            document.body.removeChild(toast);
+                        }
+                    }, 300);
                 }, 3000);
             }
             
