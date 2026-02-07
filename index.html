@@ -676,17 +676,12 @@
             padding: 30px 24px;
             box-shadow: var(--shadow-md);
             transition: var(--transition);
-            border: 3px solid transparent;
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
             text-align: center;
             position: relative;
             overflow: hidden;
             cursor: pointer;
-        }
-
-        /* Borda gradiente fixa para todos os cards */
-        .pricing-card {
-            border: 3px solid;
-            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
         }
 
         .pricing-card.featured {
@@ -717,6 +712,18 @@
         .pricing-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-5px);
+        }
+
+        .pricing-card.selected:hover {
+            transform: translateY(-5px);
+        }
+
+        .pricing-card.featured.selected:hover {
+            transform: scale(1.02) translateY(-5px);
         }
 
         .pricing-badge {
@@ -786,9 +793,36 @@
         }
 
         @keyframes borderPulse {
-            0% { border-image-source: linear-gradient(135deg, var(--success), var(--accent)); }
-            50% { border-image-source: linear-gradient(135deg, var(--accent), var(--success)); }
-            100% { border-image-source: linear-gradient(135deg, var(--success), var(--accent)); }
+            0% { 
+                border-image-source: linear-gradient(135deg, var(--success), var(--accent));
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            }
+            50% { 
+                border-image-source: linear-gradient(135deg, var(--accent), var(--success));
+                box-shadow: 0 0 25px rgba(6, 182, 212, 0.4);
+            }
+            100% { 
+                border-image-source: linear-gradient(135deg, var(--success), var(--accent));
+                box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            }
+        }
+
+        /* Efeito hover mantém borda azul */
+        .pricing-card:hover:not(.selected) {
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Card em destaque (featured) mantém borda azul quando não selecionado */
+        .pricing-card.featured:not(.selected) {
+            border-image: linear-gradient(135deg, var(--primary), var(--secondary)) 1;
+        }
+
+        /* Card em destaque e selecionado */
+        .pricing-card.featured.selected {
+            border-image: linear-gradient(135deg, var(--success), var(--accent)) 1;
+            transform: scale(1.02) translateY(-5px);
         }
 
         /* Seção de Serviços - ESTILO FAQ COM BORDAS FIXAS AZUIS */
@@ -1363,7 +1397,7 @@
             <a href="#services">Serviços</a>
             <a href="#pricing">Preços</a>
             <a href="#systems">Sistemas</a>
-            <li><a href="#adc.html"></a></li>
+            <a href="#adc.html"></a>
             
             <!-- Botões de autenticação mobile -->
             <div class="mobile-auth-buttons">
@@ -1590,15 +1624,13 @@
                         <div class="pricing-period">/mês</div>
                     </div>
                     <ul class="pricing-features">
-                        <li><i class="fas fa-check"></i> Gestão de até 1 documentos</li>
+                        <li><i class="fas fa-check"></i> Gestão de até 1 documento</li>
                         <li><i class="fas fa-check"></i> Alertas de vencimento básicos</li>
                         <li><i class="fas fa-check"></i> Acesso a consultas de processos</li>
                         <li><i class="fas fa-times"></i> Suporte por email (48h)</li>
                         <li><i class="fas fa-times"></i> Consultoria migratória</li>
                     </ul>
-                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de saber mais sobre o plano Free da CENTRAL TECH" target="_blank" class="whatsapp-link">
-                        <button class="btn btn-secondary" style="width: 100%;">Começar Gratuitamente</button>
-                    </a>
+                    <button class="btn btn-secondary" style="width: 100%;" data-plan-select="free">Selecionar Free</button>
                 </div>
                 
                 <div class="pricing-card featured selected" data-plan="pro">
@@ -1615,9 +1647,7 @@
                         <li><i class="fas fa-check"></i> Suporte prioritário (24h)</li>
                         <li><i class="fas fa-check"></i> Relatórios mensais</li>
                     </ul>
-                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de assinar o plano Pró da CENTRAL TECH" target="_blank" class="whatsapp-link">
-                        <button class="btn btn-primary" style="width: 100%;">Assinar Agora</button>
-                    </a>
+                    <button class="btn btn-primary" style="width: 100%;" data-plan-select="pro">Assinar Agora</button>
                 </div>
                 
                 <div class="pricing-card" data-plan="empresa">
@@ -1633,9 +1663,7 @@
                         <li><i class="fas fa-check"></i> Gestão de vistos corporativos</li>
                         <li><i class="fas fa-check"></i> Dashboard empresarial</li>
                     </ul>
-                    <a href="https://wa.me/17862553181?text=Olá! Gostaria de saber mais sobre o plano Empresas da CENTRAL TECH" target="_blank" class="whatsapp-link">
-                        <button class="btn btn-secondary" style="width: 100%;">Fale Conosco</button>
-                    </a>
+                    <button class="btn btn-secondary" style="width: 100%;" data-plan-select="empresa">Fale Conosco</button>
                 </div>
             </div>
         </div>
@@ -1846,479 +1874,513 @@
 
     <script>
         // Elementos do DOM
-const authModal = document.getElementById('authModal');
-const loginBtn = document.getElementById('loginBtn');
-const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-const signupBtn = document.getElementById('signupBtn');
-const mobileSignupBtn = document.getElementById('mobileSignupBtn');
-const heroSignupBtn = document.getElementById('heroSignupBtn');
-const closeAuthModal = document.getElementById('closeAuthModal');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-const toast = document.getElementById('toast');
-const toastTitle = document.getElementById('toastTitle');
-const toastMessage = document.getElementById('toastMessage');
-const toastClose = document.getElementById('toastClose');
-const webviewContainer = document.getElementById('webviewContainer');
-const webviewFrame = document.getElementById('webviewFrame');
-const webviewTitle = document.getElementById('webviewTitle');
-const closeWebview = document.getElementById('closeWebview');
-const webviewLoading = document.getElementById('webviewLoading');
-const webviewError = document.getElementById('webviewError');
-const eoirBtn = document.getElementById('eoirBtn');
+        const authModal = document.getElementById('authModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+        const signupBtn = document.getElementById('signupBtn');
+        const mobileSignupBtn = document.getElementById('mobileSignupBtn');
+        const heroSignupBtn = document.getElementById('heroSignupBtn');
+        const closeAuthModal = document.getElementById('closeAuthModal');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const toast = document.getElementById('toast');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastMessage = document.getElementById('toastMessage');
+        const toastClose = document.getElementById('toastClose');
+        const webviewContainer = document.getElementById('webviewContainer');
+        const webviewFrame = document.getElementById('webviewFrame');
+        const webviewTitle = document.getElementById('webviewTitle');
+        const closeWebview = document.getElementById('closeWebview');
+        const webviewLoading = document.getElementById('webviewLoading');
+        const webviewError = document.getElementById('webviewError');
+        const eoirBtn = document.getElementById('eoirBtn');
 
-// URLs dos sistemas
-const systemUrls = {
-    eoir: {
-        url: 'https://acis.eoir.justice.gov/en/',
-        name: 'EOIR - Processos de Imigração'
-    }
-};
+        // URLs dos sistemas
+        const systemUrls = {
+            eoir: {
+                url: 'https://acis.eoir.justice.gov/en/',
+                name: 'EOIR - Processos de Imigração'
+            }
+        };
 
-// WhatsApp número
-const whatsappNumber = '+5511989321702';
-
-// Função para redirecionar para adc.html
-function redirectToADC() {
-    // Simular um breve delay para mostrar feedback visual
-    setTimeout(() => {
-        window.location.href = 'adc.html';
-    }, 500);
-}
-
-// Funções auxiliares
-function showToast(title, message, type = "success") {
-    toastTitle.textContent = title;
-    toastMessage.textContent = message;
-    
-    // Definir cor baseada no tipo
-    const colors = {
-        success: "#10b981",
-        error: "#ef4444",
-        warning: "#f59e0b",
-        info: "#06b6d4"
-    };
-    
-    toast.style.borderLeftColor = colors[type] || colors.success;
-    toast.querySelector('.toast-icon').style.color = colors[type] || colors.success;
-    
-    toast.classList.add('show');
-    
-    // Auto-fechar após 5 segundos
-    setTimeout(() => {
-        hideToast();
-    }, 5000);
-}
-
-function hideToast() {
-    toast.classList.remove('show');
-}
-
-// Abrir sistema EOIR em webview
-function openSystemInWebview(system) {
-    const systemInfo = systemUrls[system];
-    if (!systemInfo) return;
-    
-    // Mostrar loading
-    webviewLoading.style.display = 'flex';
-    webviewError.style.display = 'none';
-    webviewFrame.style.display = 'none';
-    
-    webviewFrame.src = '';
-    webviewTitle.innerHTML = `<i class="fas fa-globe"></i> ${systemInfo.name}`;
-    webviewContainer.style.display = 'block';
-    
-    // Scroll para o webview
-    webviewContainer.scrollIntoView({ behavior: 'smooth' });
-    
-    // Configurar evento de load
-    webviewFrame.onload = function() {
-        webviewLoading.style.display = 'none';
-        webviewFrame.style.display = 'block';
-        webviewError.style.display = 'none';
-        showToast('Sistema carregado', `${systemInfo.name} está pronto para uso.`, 'success');
-    };
-    
-    webviewFrame.onerror = function() {
-        webviewLoading.style.display = 'none';
-        webviewError.style.display = 'block';
-        showToast('Erro de conexão', 'Não foi possível carregar o sistema. Verifique sua conexão.', 'error');
-    };
-    
-    // Iniciar carregamento
-    webviewFrame.src = systemInfo.url;
-}
-
-// Fechar webview
-function closeWebviewContainer() {
-    webviewContainer.style.display = 'none';
-    webviewFrame.src = '';
-    webviewLoading.style.display = 'none';
-    webviewError.style.display = 'none';
-    webviewFrame.style.display = 'block';
-}
-
-// Alternar entre tabs do modal
-function switchAuthTab(tabName) {
-    // Ativar tab clicada
-    document.querySelectorAll('.modal-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.dataset.tab === tabName);
-    });
-    
-    // Mostrar conteúdo correspondente
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.toggle('active', content.id === `${tabName}Tab`);
-    });
-}
-
-// Alternar entre serviços (estilo FAQ) - CORRIGIDO PARA RESPOSTAS INTEGRAIS
-function toggleService(index) {
-    const serviceItems = document.querySelectorAll('.service-faq-item');
-    const questionButtons = document.querySelectorAll('.service-question');
-    const answerDivs = document.querySelectorAll('.service-answer');
-    
-    // Fechar todos os outros itens
-    serviceItems.forEach((item, i) => {
-        if (i !== index) {
-            item.classList.remove('active');
-            questionButtons[i].classList.remove('active');
-            answerDivs[i].classList.remove('active');
-            answerDivs[i].style.maxHeight = '0';
-            answerDivs[i].style.padding = '0';
+        // Função para redirecionar para adc.html
+        function redirectToADC() {
+            // Simular um breve delay para mostrar feedback visual
+            setTimeout(() => {
+                window.location.href = 'adc.html';
+            }, 500);
         }
-    });
-    
-    // Alternar o item clicado
-    const isActive = serviceItems[index].classList.contains('active');
-    
-    if (!isActive) {
-        serviceItems[index].classList.add('active');
-        questionButtons[index].classList.add('active');
-        answerDivs[index].classList.add('active');
-        answerDivs[index].style.maxHeight = 'none'; // Permite altura total
-        answerDivs[index].style.padding = '32px';
-        
-        // Scroll suave para o item aberto
-        setTimeout(() => {
-            serviceItems[index].scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'nearest' 
-            });
-        }, 100);
-    } else {
-        serviceItems[index].classList.remove('active');
-        questionButtons[index].classList.remove('active');
-        answerDivs[index].classList.remove('active');
-        answerDivs[index].style.maxHeight = '0';
-        answerDivs[index].style.padding = '0';
-    }
-}
 
-// Selecionar plano de preços
-function selectPricingCard(plan) {
-    // Remover seleção de todos os cards
-    document.querySelectorAll('.pricing-card').forEach(card => {
-        card.classList.remove('selected');
-    });
-    
-    // Adicionar seleção ao card clicado
-    const selectedCard = document.querySelector(`.pricing-card[data-plan="${plan}"]`);
-    if (selectedCard) {
-        selectedCard.classList.add('selected');
-    }
-}
+        // Funções auxiliares
+        function showToast(title, message, type = "success") {
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            // Definir cor baseada no tipo
+            const colors = {
+                success: "#10b981",
+                error: "#ef4444",
+                warning: "#f59e0b",
+                info: "#06b6d4"
+            };
+            
+            toast.style.borderLeftColor = colors[type] || colors.success;
+            toast.querySelector('.toast-icon').style.color = colors[type] || colors.success;
+            
+            toast.classList.add('show');
+            
+            // Auto-fechar após 5 segundos
+            setTimeout(() => {
+                hideToast();
+            }, 5000);
+        }
 
-// Redirecionar para WhatsApp
-function redirectToWhatsApp(message = 'Olá! Gostaria de saber mais sobre os serviços da CENTRAL TECH') {
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
-}
+        function hideToast() {
+            toast.classList.remove('show');
+        }
 
-// Simular login com Google
-function simulateGoogleLogin(isSignup = false) {
-    // Gerar um nome de usuário aleatório
-    const firstNames = ["João", "Maria", "Carlos", "Ana", "Pedro", "Juliana", "Marcos", "Fernanda"];
-    const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Almeida", "Pereira", "Costa"];
-    
-    const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-    const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@gmail.com`;
-    
-    const action = isSignup ? 'cadastro' : 'login';
-    
-    return {
-        name: `${randomFirstName} ${randomLastName}`,
-        email: randomEmail,
-        action: action
-    };
-}
+        // Abrir sistema EOIR em webview
+        function openSystemInWebview(system) {
+            const systemInfo = systemUrls[system];
+            if (!systemInfo) return;
+            
+            // Mostrar loading
+            webviewLoading.style.display = 'flex';
+            webviewError.style.display = 'none';
+            webviewFrame.style.display = 'none';
+            
+            webviewFrame.src = '';
+            webviewTitle.innerHTML = `<i class="fas fa-globe"></i> ${systemInfo.name}`;
+            webviewContainer.style.display = 'block';
+            
+            // Scroll para o webview
+            webviewContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Configurar evento de load
+            webviewFrame.onload = function() {
+                webviewLoading.style.display = 'none';
+                webviewFrame.style.display = 'block';
+                webviewError.style.display = 'none';
+                showToast('Sistema carregado', `${systemInfo.name} está pronto para uso.`, 'success');
+            };
+            
+            webviewFrame.onerror = function() {
+                webviewLoading.style.display = 'none';
+                webviewError.style.display = 'block';
+                showToast('Erro de conexão', 'Não foi possível carregar o sistema. Verifique sua conexão.', 'error');
+            };
+            
+            // Iniciar carregamento
+            webviewFrame.src = systemInfo.url;
+        }
 
-// Event Listeners
-// Botões de login
-loginBtn.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-    switchAuthTab('login');
-});
+        // Fechar webview
+        function closeWebviewContainer() {
+            webviewContainer.style.display = 'none';
+            webviewFrame.src = '';
+            webviewLoading.style.display = 'none';
+            webviewError.style.display = 'none';
+            webviewFrame.style.display = 'block';
+        }
 
-mobileLoginBtn.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-    switchAuthTab('login');
-    mobileMenu.classList.remove('active');
-});
-
-// Botões de cadastro
-signupBtn.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-    switchAuthTab('signup');
-});
-
-mobileSignupBtn.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-    switchAuthTab('signup');
-    mobileMenu.classList.remove('active');
-});
-
-heroSignupBtn.addEventListener('click', () => {
-    authModal.style.display = 'flex';
-    switchAuthTab('signup');
-});
-
-// Fechar modal
-closeAuthModal.addEventListener('click', () => {
-    authModal.style.display = 'none';
-});
-
-// Fechar modal ao clicar fora
-window.addEventListener('click', (e) => {
-    if (e.target === authModal) {
-        authModal.style.display = 'none';
-    }
-});
-
-// Tabs do modal
-document.querySelectorAll('.modal-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        switchAuthTab(tab.dataset.tab);
-    });
-});
-
-// Login form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-    
-    // Simulação de login bem-sucedido
-    if (email && password) {
-        // Mostrar mensagem de sucesso
-        showToast('Login realizado', 'Redirecionando para área do cliente...', 'success');
-        
-        // Redirecionar para adc.html após 1 segundo
-        setTimeout(() => {
-            authModal.style.display = 'none';
-            window.location.href = 'adc.html';
-        }, 1000);
-    } else {
-        showToast('Erro no login', 'Por favor, preencha todos os campos.', 'error');
-    }
-});
-
-// Cadastro form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
-document.getElementById('signupForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const confirmPassword = document.getElementById('signupConfirmPassword').value;
-    
-    // Validação básica
-    if (!name || !email || !password) {
-        showToast('Erro no cadastro', 'Por favor, preencha todos os campos obrigatórios.', 'error');
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showToast('Erro no cadastro', 'As senhas não coincidem.', 'error');
-        return;
-    }
-    
-    if (!document.getElementById('acceptTerms').checked) {
-        showToast('Erro no cadastro', 'Você deve aceitar os termos de serviço.', 'error');
-        return;
-    }
-    
-    // Simulação de cadastro bem-sucedido
-    showToast('Cadastro realizado', `Bem-vindo(a), ${name}! Redirecionando para área do cliente...`, 'success');
-    
-    // Redirecionar para adc.html após 1 segundo
-    setTimeout(() => {
-        authModal.style.display = 'none';
-        window.location.href = 'adc.html';
-    }, 1000);
-});
-
-// Login com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
-document.getElementById('googleLoginBtn').addEventListener('click', () => {
-    // Simular tempo de autenticação
-    const btn = document.getElementById('googleLoginBtn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
-    btn.disabled = true;
-    
-    setTimeout(() => {
-        const googleUser = simulateGoogleLogin(false);
-        
-        // Mostrar mensagem de sucesso
-        showToast('Login com Google realizado', `Bem-vindo, ${googleUser.name}! Redirecionando...`, 'success');
-        
-        // Redirecionar para adc.html após 1 segundo
-        setTimeout(() => {
-            authModal.style.display = 'none';
-            window.location.href = 'adc.html';
-        }, 1000);
-        
-        // Resetar botão do Google
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }, 1500);
-});
-
-// Cadastro com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
-document.getElementById('googleSignupBtn').addEventListener('click', () => {
-    // Simular tempo de autenticação
-    const btn = document.getElementById('googleSignupBtn');
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
-    btn.disabled = true;
-    
-    setTimeout(() => {
-        const googleUser = simulateGoogleLogin(true);
-        
-        // Mostrar mensagem de sucesso
-        showToast('Cadastro com Google realizado', `Conta criada para ${googleUser.name}! Redirecionando...`, 'success');
-        
-        // Redirecionar para adc.html após 1 segundo
-        setTimeout(() => {
-            authModal.style.display = 'none';
-            window.location.href = 'adc.html';
-        }, 1000);
-        
-        // Resetar botão do Google
-        btn.innerHTML = originalText;
-        btn.disabled = false;
-    }, 1500);
-});
-
-// Menu mobile
-mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('active');
-});
-
-// Fechar menu mobile ao clicar fora
-document.addEventListener('click', (e) => {
-    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-        mobileMenu.classList.remove('active');
-    }
-});
-
-// Botão EOIR (abre no webview)
-eoirBtn.addEventListener('click', () => {
-    openSystemInWebview('eoir');
-});
-
-// Fechar webview
-closeWebview.addEventListener('click', closeWebviewContainer);
-
-// Botões de serviços (FAQ)
-document.querySelectorAll('.service-question').forEach((btn, index) => {
-    btn.addEventListener('click', () => {
-        toggleService(index);
-    });
-});
-
-// Seleção de cards de preços
-document.querySelectorAll('.pricing-card').forEach(card => {
-    card.addEventListener('click', () => {
-        const plan = card.getAttribute('data-plan');
-        selectPricingCard(plan);
-    });
-});
-
-// Esqueci minha senha
-document.getElementById('forgotPassword').addEventListener('click', (e) => {
-    e.preventDefault();
-    showToast('Recuperação de senha', 'Um e-mail de recuperação será enviado para você.', 'info');
-});
-
-// Toast close button
-toastClose.addEventListener('click', () => {
-    hideToast();
-});
-
-// Smooth scroll para âncoras
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        if (this.getAttribute('href') === '#') return;
-        
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        
-        if (targetElement) {
-            window.scrollTo({
-                top: targetElement.offsetTop - 100,
-                behavior: 'smooth'
+        // Alternar entre tabs do modal
+        function switchAuthTab(tabName) {
+            // Ativar tab clicada
+            document.querySelectorAll('.modal-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.tab === tabName);
             });
             
-            // Fechar menu mobile se aberto
+            // Mostrar conteúdo correspondente
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.toggle('active', content.id === `${tabName}Tab`);
+            });
+        }
+
+        // Alternar entre serviços (estilo FAQ) - CORRIGIDO PARA RESPOSTAS INTEGRAIS
+        function toggleService(index) {
+            const serviceItems = document.querySelectorAll('.service-faq-item');
+            const questionButtons = document.querySelectorAll('.service-question');
+            const answerDivs = document.querySelectorAll('.service-answer');
+            
+            // Fechar todos os outros itens
+            serviceItems.forEach((item, i) => {
+                if (i !== index) {
+                    item.classList.remove('active');
+                    questionButtons[i].classList.remove('active');
+                    answerDivs[i].classList.remove('active');
+                    answerDivs[i].style.maxHeight = '0';
+                    answerDivs[i].style.padding = '0';
+                }
+            });
+            
+            // Alternar o item clicado
+            const isActive = serviceItems[index].classList.contains('active');
+            
+            if (!isActive) {
+                serviceItems[index].classList.add('active');
+                questionButtons[index].classList.add('active');
+                answerDivs[index].classList.add('active');
+                answerDivs[index].style.maxHeight = 'none'; // Permite altura total
+                answerDivs[index].style.padding = '32px';
+                
+                // Scroll suave para o item aberto
+                setTimeout(() => {
+                    serviceItems[index].scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest' 
+                    });
+                }, 100);
+            } else {
+                serviceItems[index].classList.remove('active');
+                questionButtons[index].classList.remove('active');
+                answerDivs[index].classList.remove('active');
+                answerDivs[index].style.maxHeight = '0';
+                answerDivs[index].style.padding = '0';
+            }
+        }
+
+        // Selecionar plano de preços
+        function selectPricingCard(plan) {
+            // Remover seleção de todos os cards
+            document.querySelectorAll('.pricing-card').forEach(card => {
+                card.classList.remove('selected');
+                // Garantir que a borda padrão seja azul (gradiente primário)
+                card.style.borderImage = 'linear-gradient(135deg, var(--primary), var(--secondary)) 1';
+            });
+            
+            // Adicionar seleção ao card clicado com cor de destaque
+            const selectedCard = document.querySelector(`.pricing-card[data-plan="${plan}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+                // Aplicar gradiente de destaque (verde/azul) para o card selecionado
+                selectedCard.style.borderImage = 'linear-gradient(135deg, var(--success), var(--accent)) 1';
+            }
+        }
+
+        // Função auxiliar para obter o nome do plano
+        function getPlanName(planKey) {
+            const planNames = {
+                'free': 'Free',
+                'pro': 'Pró',
+                'empresa': 'Empresas'
+            };
+            return planNames[planKey] || 'Plano';
+        }
+
+        // Event listeners para botões de seleção de plano
+        document.querySelectorAll('[data-plan-select]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evita que o clique no botão selecione o card
+                const plan = this.getAttribute('data-plan-select');
+                
+                // Primeiro seleciona o card visualmente
+                selectPricingCard(plan);
+                
+                // Aguarda um pouco para mostrar a animação de seleção
+                setTimeout(() => {
+                    // Abre o modal de autenticação
+                    authModal.style.display = 'flex';
+                    switchAuthTab('signup');
+                    
+                    // Mensagem informativa
+                    showToast(
+                        'Seleção de Plano', 
+                        `Você selecionou o plano ${getPlanName(plan)}. Complete seu cadastro para continuar.`, 
+                        'info'
+                    );
+                }, 300);
+            });
+        });
+
+        // Seleção de cards de preços ao clicar no card (não no botão)
+        document.querySelectorAll('.pricing-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Se o clique foi no botão, não fazemos nada (já tem handler separado)
+                if (e.target.closest('[data-plan-select]')) {
+                    return;
+                }
+                const plan = this.getAttribute('data-plan');
+                selectPricingCard(plan);
+            });
+        });
+
+        // Simular login com Google
+        function simulateGoogleLogin(isSignup = false) {
+            // Gerar um nome de usuário aleatório
+            const firstNames = ["João", "Maria", "Carlos", "Ana", "Pedro", "Juliana", "Marcos", "Fernanda"];
+            const lastNames = ["Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Almeida", "Pereira", "Costa"];
+            
+            const randomFirstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const randomLastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+            const randomEmail = `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@gmail.com`;
+            
+            const action = isSignup ? 'cadastro' : 'login';
+            
+            return {
+                name: `${randomFirstName} ${randomLastName}`,
+                email: randomEmail,
+                action: action
+            };
+        }
+
+        // Event Listeners
+        // Botões de login
+        loginBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            switchAuthTab('login');
+        });
+
+        mobileLoginBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            switchAuthTab('login');
             mobileMenu.classList.remove('active');
-        }
-    });
-});
+        });
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', () => {
-    // Selecionar plano Pró por padrão
-    selectPricingCard('pro');
-    
-    // Ajustar altura das respostas dos serviços ativos
-    document.querySelectorAll('.service-answer.active').forEach(answer => {
-        answer.style.maxHeight = 'none';
-        answer.style.display = 'block';
-    });
-    
-    // Mostrar mensagem de boas-vindas
-    setTimeout(() => {
-        showToast('Bem-vindo à CENTRAL TECH', 'Explore nossos serviços e sistemas oficiais', 'info');
-    }, 1000);
-    
-    // Configurar webview para abrir links dentro dele mesmo
-    webviewFrame.addEventListener('load', function() {
-        try {
-            // Tentar interceptar links dentro do iframe
-            const iframeDoc = webviewFrame.contentDocument || webviewFrame.contentWindow.document;
-            const links = iframeDoc.querySelectorAll('a');
-            
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const url = this.href;
-                    if (url && !url.includes('javascript:')) {
-                        webviewFrame.src = url;
-                    }
-                });
+        // Botões de cadastro
+        signupBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            switchAuthTab('signup');
+        });
+
+        mobileSignupBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            switchAuthTab('signup');
+            mobileMenu.classList.remove('active');
+        });
+
+        heroSignupBtn.addEventListener('click', () => {
+            authModal.style.display = 'flex';
+            switchAuthTab('signup');
+        });
+
+        // Fechar modal
+        closeAuthModal.addEventListener('click', () => {
+            authModal.style.display = 'none';
+        });
+
+        // Fechar modal ao clicar fora
+        window.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                authModal.style.display = 'none';
+            }
+        });
+
+        // Tabs do modal
+        document.querySelectorAll('.modal-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                switchAuthTab(tab.dataset.tab);
             });
-        } catch (e) {
-            // Erro de cross-origin, ignorar
-        }
-    });
-});
+        });
+
+        // Login form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulação de login bem-sucedido
+            if (email && password) {
+                // Mostrar mensagem de sucesso
+                showToast('Login realizado', 'Redirecionando para área do cliente...', 'success');
+                
+                // Redirecionar para adc.html após 1 segundo
+                setTimeout(() => {
+                    authModal.style.display = 'none';
+                    window.location.href = 'adc.html';
+                }, 1000);
+            } else {
+                showToast('Erro no login', 'Por favor, preencha todos os campos.', 'error');
+            }
+        });
+
+        // Cadastro form submission - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            // Validação básica
+            if (!name || !email || !password) {
+                showToast('Erro no cadastro', 'Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showToast('Erro no cadastro', 'As senhas não coincidem.', 'error');
+                return;
+            }
+            
+            if (!document.getElementById('acceptTerms').checked) {
+                showToast('Erro no cadastro', 'Você deve aceitar os termos de serviço.', 'error');
+                return;
+            }
+            
+            // Simulação de cadastro bem-sucedido
+            showToast('Cadastro realizado', `Bem-vindo(a), ${name}! Redirecionando para área do cliente...`, 'success');
+            
+            // Redirecionar para adc.html após 1 segundo
+            setTimeout(() => {
+                authModal.style.display = 'none';
+                window.location.href = 'adc.html';
+            }, 1000);
+        });
+
+        // Login com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+        document.getElementById('googleLoginBtn').addEventListener('click', () => {
+            // Simular tempo de autenticação
+            const btn = document.getElementById('googleLoginBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                const googleUser = simulateGoogleLogin(false);
+                
+                // Mostrar mensagem de sucesso
+                showToast('Login com Google realizado', `Bem-vindo, ${googleUser.name}! Redirecionando...`, 'success');
+                
+                // Redirecionar para adc.html após 1 segundo
+                setTimeout(() => {
+                    authModal.style.display = 'none';
+                    window.location.href = 'adc.html';
+                }, 1000);
+                
+                // Resetar botão do Google
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
+        });
+
+        // Cadastro com Google - MODIFICADO PARA REDIRECIONAR PARA ADC.HTML
+        document.getElementById('googleSignupBtn').addEventListener('click', () => {
+            // Simular tempo de autenticação
+            const btn = document.getElementById('googleSignupBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                const googleUser = simulateGoogleLogin(true);
+                
+                // Mostrar mensagem de sucesso
+                showToast('Cadastro com Google realizado', `Conta criada para ${googleUser.name}! Redirecionando...`, 'success');
+                
+                // Redirecionar para adc.html após 1 segundo
+                setTimeout(() => {
+                    authModal.style.display = 'none';
+                    window.location.href = 'adc.html';
+                }, 1000);
+                
+                // Resetar botão do Google
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
+        });
+
+        // Menu mobile
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+
+        // Fechar menu mobile ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Botão EOIR (abre no webview)
+        eoirBtn.addEventListener('click', () => {
+            openSystemInWebview('eoir');
+        });
+
+        // Fechar webview
+        closeWebview.addEventListener('click', closeWebviewContainer);
+
+        // Botões de serviços (FAQ)
+        document.querySelectorAll('.service-question').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                toggleService(index);
+            });
+        });
+
+        // Esqueci minha senha
+        document.getElementById('forgotPassword').addEventListener('click', (e) => {
+            e.preventDefault();
+            showToast('Recuperação de senha', 'Um e-mail de recuperação será enviado para você.', 'info');
+        });
+
+        // Toast close button
+        toastClose.addEventListener('click', () => {
+            hideToast();
+        });
+
+        // Smooth scroll para âncoras
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                if (this.getAttribute('href') === '#') return;
+                
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fechar menu mobile se aberto
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            // Selecionar plano Pró por padrão
+            selectPricingCard('pro');
+            
+            // Ajustar altura das respostas dos serviços ativos
+            document.querySelectorAll('.service-answer.active').forEach(answer => {
+                answer.style.maxHeight = 'none';
+                answer.style.display = 'block';
+            });
+            
+            // Mostrar mensagem de boas-vindas
+            setTimeout(() => {
+                showToast('Bem-vindo à CENTRAL TECH', 'Explore nossos serviços e sistemas oficiais', 'info');
+            }, 1000);
+            
+            // Configurar webview para abrir links dentro dele mesmo
+            webviewFrame.addEventListener('load', function() {
+                try {
+                    // Tentar interceptar links dentro do iframe
+                    const iframeDoc = webviewFrame.contentDocument || webviewFrame.contentWindow.document;
+                    const links = iframeDoc.querySelectorAll('a');
+                    
+                    links.forEach(link => {
+                        link.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const url = this.href;
+                            if (url && !url.includes('javascript:')) {
+                                webviewFrame.src = url;
+                            }
+                        });
+                    });
+                } catch (e) {
+                    // Erro de cross-origin, ignorar
+                }
+            });
+        });
     </script>
 </body>
 </html>
+
 
 
